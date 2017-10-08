@@ -91,4 +91,20 @@ class DefaultsTest extends TestCase
             $defaults->getParameter('timeout connect')
         );
     }
+
+    public function testRemoveParameter()
+    {
+        $defaults = new Defaults();
+        $defaults->addParameter('mode', 'http');
+
+        $this->assertTrue(
+            $defaults->parameterExists('mode')
+        );
+
+        $defaults->removeParameter('mode');
+
+        $this->assertFalse(
+            $defaults->parameterExists('mode')
+        );
+    }
 }

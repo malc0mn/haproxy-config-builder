@@ -152,6 +152,27 @@ abstract class Parambag extends Printable
         return $this;
     }
 
+    /**
+     * Remove a parameter by keyword.
+     *
+     * @param string $keyword
+     *
+     * @return $this
+     */
+    public function removeParameter($keyword)
+    {
+        unset($this->parameters[$keyword]);
+
+        return $this;
+    }
+
+    /**
+     * Throw an invalid parameter exception.
+     *
+     * @param string $text
+     *
+     * @throws InvalidParameterException
+     */
     protected function throwInvalidParam($text)
     {
         throw new InvalidParameterException(sprintf(

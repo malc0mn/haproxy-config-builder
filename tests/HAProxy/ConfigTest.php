@@ -151,6 +151,24 @@ class ConfigTest extends TestCase
         );
     }
 
+    public function testRemoveListen()
+    {
+        $config = Config::create()
+            ->addListen(new Listen('test'))
+        ;
+
+        $this->assertInstanceOf(
+            'HAProxy\Config\Proxy\Listen',
+            $config->getListen('test')
+        );
+
+        $config->removeListen('test');
+
+        $this->assertFalse(
+            $config->listenExists('test')
+        );
+    }
+
     public function testAddFrontend()
     {
         $config = Config::create()
@@ -166,6 +184,24 @@ class ConfigTest extends TestCase
         );
     }
 
+    public function testRemoveFrontend()
+    {
+        $config = Config::create()
+            ->addFrontend(new Frontend('test'))
+        ;
+
+        $this->assertInstanceOf(
+            'HAProxy\Config\Proxy\Frontend',
+            $config->getFrontend('test')
+        );
+
+        $config->removeFrontend('test');
+
+        $this->assertFalse(
+            $config->frontendExists('test')
+        );
+    }
+
     public function testAddBackend()
     {
         $config = Config::create()
@@ -178,6 +214,24 @@ class ConfigTest extends TestCase
         $this->assertInstanceOf(
             'HAProxy\Config\Proxy\Backend',
             $config->getBackend('test')
+        );
+    }
+
+    public function testRemoveBackend()
+    {
+        $config = Config::create()
+            ->addBackend(new Backend('test'))
+        ;
+
+        $this->assertInstanceOf(
+            'HAProxy\Config\Proxy\Backend',
+            $config->getBackend('test')
+        );
+
+        $config->removeBackend('test');
+
+        $this->assertFalse(
+            $config->backendExists('test')
         );
     }
 

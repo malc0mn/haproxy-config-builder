@@ -331,6 +331,19 @@ class Config extends Printable
     }
 
     /**
+     * Remove listen block by name.
+     *
+     * @param string $name
+     *
+     * @return self
+     */
+    public function removeListen($name) {
+        unset($this->proxies["listen $name"]);
+
+        return $this;
+    }
+
+    /**
      * Get listen block by name.
      *
      * @param string $name
@@ -368,6 +381,19 @@ class Config extends Printable
     }
 
     /**
+     * Remove frontend block by name.
+     *
+     * @param string $name
+     *
+     * @return self
+     */
+    public function removeFrontend($name) {
+        unset($this->proxies["frontend $name"]);
+
+        return $this;
+    }
+
+    /**
      * Get frontend by name.
      *
      * @param string $name
@@ -400,6 +426,19 @@ class Config extends Printable
     public function addBackend(Backend $backend)
     {
         $this->proxies['backend ' . $backend->getName()] = $backend;
+
+        return $this;
+    }
+
+    /**
+     * Remove backend block by name.
+     *
+     * @param string $name
+     *
+     * @return self
+     */
+    public function removeBackend($name) {
+        unset($this->proxies["backend $name"]);
 
         return $this;
     }

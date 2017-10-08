@@ -94,6 +94,29 @@ $configFromFile = Config::fromFile('/etc/haproxy/haproxy.conf');
 var_export($configFromFile);
 ```
 
+### Now what?
+
+Once you have the config, you can use the various helper methods to
+programatically alter or update the config.
+Or you can use those helpers to conditionally add or remove settings...
+
+```php
+require 'vendor/autoload.php';
+
+use HAProxy\Config\Config;
+
+$config = Config::fromFile('/etc/haproxy/haproxy.conf');
+
+if ($config->frontendExists('www') && !$config->backendExists('www')) {
+   $config->removeFrontend('www');
+}
+
+if ($config->listenExists('ssh')) {
+   // Do stuff here.
+}
+```
+
+Have a look at the classes to see what is at your disposal.
 
 ## Credits
 
