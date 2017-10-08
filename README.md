@@ -1,11 +1,11 @@
 HAProxy Config Processor
 ========================
 
-[![Build Status](https://travis-ci.org/malc0mn/haproxy-config-processor.svg?branch=master)](https://travis-ci.org/malc0mn/haproxy-config-processor)
-[![Latest Stable Version](https://poser.pugx.org/malc0mn/haproxy-config-processor/v/stable)](https://packagist.org/packages/malc0mn/haproxy-config-processor)
-[![Total Downloads](https://poser.pugx.org/malc0mn/haproxy-config-processor/downloads)](https://packagist.org/packages/malc0mn/haproxy-config-processor)
-[![Latest Unstable Version](https://poser.pugx.org/malc0mn/haproxy-config-processor/v/unstable)](https://packagist.org/packages/malc0mn/haproxy-config-processor)
-[![License](https://poser.pugx.org/malc0mn/haproxy-config-processor/license)](https://packagist.org/packages/malc0mn/haproxy-config-processor)
+[![Build Status](https://travis-ci.org/malc0mn/haproxy-config-builder.svg?branch=master)](https://travis-ci.org/malc0mn/haproxy-config-builder)
+[![Latest Stable Version](https://poser.pugx.org/malc0mn/haproxy-config-builder/v/stable)](https://packagist.org/packages/malc0mn/haproxy-config-builder)
+[![Total Downloads](https://poser.pugx.org/malc0mn/haproxy-config-builder/downloads)](https://packagist.org/packages/malc0mn/haproxy-config-builder)
+[![Latest Unstable Version](https://poser.pugx.org/malc0mn/haproxy-config-builder/v/unstable)](https://packagist.org/packages/malc0mn/haproxy-config-builder)
+[![License](https://poser.pugx.org/malc0mn/haproxy-config-builder/license)](https://packagist.org/packages/malc0mn/haproxy-config-builder)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/6b5c0f4f-28db-4714-bb47-9f92ed8f7fbf/mini.png)](https://insight.sensiolabs.com/projects/24e6faf8-0baa-4bf8-a921-77b24e84faa3)
 
 
@@ -14,7 +14,7 @@ HAProxy Config Processor
 Open a shell, `cd` to your poject and type:
 
 ```sh
-composer require malc0mn/haproxy-config-processor dev-master
+composer require malc0mn/haproxy-config-builder dev-master
 ```
 
 or edit composer.json and add:
@@ -22,7 +22,7 @@ or edit composer.json and add:
 ```json
 {
     "require": {
-        "malc0mn/haproxy-config-processor": "~1.0"
+        "malc0mn/haproxy-config-builder": "~1.0"
     }
 }
 ```
