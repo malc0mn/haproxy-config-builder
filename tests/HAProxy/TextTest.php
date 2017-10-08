@@ -15,13 +15,6 @@ class TextTest extends TestCase
 
     }
 
-    public function testEolErr()
-    {
-        $text = new Text("server server1 127.0.0.1:8000 maxconn 32");
-
-        $this->assertTrue($text->eol(40));
-    }
-
     public function testEol()
     {
         $config = <<<CONFIG
