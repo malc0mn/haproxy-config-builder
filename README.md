@@ -6,7 +6,7 @@ HAProxy Config Processor
 [![Total Downloads](https://poser.pugx.org/malc0mn/haproxy-config-builder/downloads)](https://packagist.org/packages/malc0mn/haproxy-config-builder)
 [![Latest Unstable Version](https://poser.pugx.org/malc0mn/haproxy-config-builder/v/unstable)](https://packagist.org/packages/malc0mn/haproxy-config-builder)
 [![License](https://poser.pugx.org/malc0mn/haproxy-config-builder/license)](https://packagist.org/packages/malc0mn/haproxy-config-builder)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/6b5c0f4f-28db-4714-bb47-9f92ed8f7fbf/mini.png)](https://insight.sensiolabs.com/projects/24e6faf8-0baa-4bf8-a921-77b24e84faa3)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/6b5c0f4f-28db-4714-bb47-9f92ed8f7fbf/mini.png)](https://insight.sensiolabs.com/projects/6b5c0f4f-28db-4714-bb47-9f92ed8f7fbf)
 
 
 ## Install using composer
