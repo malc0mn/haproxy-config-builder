@@ -93,145 +93,127 @@ class ConfigTest extends TestCase
 
     public function testAddGlobal()
     {
-        $config = Config::create()
-            ->addGlobal('test', ['hello', 'world'])
-        ;
+        $this->config->addGlobal('test', ['hello', 'world']);
 
         $this->assertTrue(
-            $config->getGlobal()->parameterExists('test')
+            $this->config->getGlobal()->parameterExists('test')
         );
         $this->assertEquals(
             ['hello', 'world'],
-            $config->getGlobal()->getParameter('test')
+            $this->config->getGlobal()->getParameter('test')
         );
     }
 
     public function testAddDefault()
     {
-        $config = Config::create()
-            ->addDefaults('test', ['hello', 'world'])
-        ;
+        $this->config->addDefaults('test', ['hello', 'world']);
 
         $this->assertTrue(
-            $config->getDefaults()->parameterExists('test')
+            $this->config->getDefaults()->parameterExists('test')
         );
         $this->assertEquals(
             ['hello', 'world'],
-            $config->getDefaults()->getParameter('test')
+            $this->config->getDefaults()->getParameter('test')
         );
     }
 
     public function testAddUserlist()
     {
-        $config = Config::create()
-            ->addUserlist(new Userlist('test'))
-        ;
+        $this->config->addUserlist(new Userlist('test'));
 
         $this->assertTrue(
-            $config->userlistExists('test')
+            $this->config->userlistExists('test')
         );
         $this->assertInstanceOf(
             'HAProxy\Config\Userlist',
-            $config->getUserlist('test')
+            $this->config->getUserlist('test')
         );
     }
 
     public function testAddListen()
     {
-        $config = Config::create()
-            ->addListen(new Listen('test'))
-        ;
+        $this->config->addListen(new Listen('test'));
 
         $this->assertTrue(
-            $config->listenExists('test')
+            $this->config ->listenExists('test')
         );
         $this->assertInstanceOf(
             'HAProxy\Config\Proxy\Listen',
-            $config->getListen('test')
+            $this->config->getListen('test')
         );
     }
 
     public function testRemoveListen()
     {
-        $config = Config::create()
-            ->addListen(new Listen('test'))
-        ;
+        $this->config->addListen(new Listen('test'));
 
         $this->assertInstanceOf(
             'HAProxy\Config\Proxy\Listen',
-            $config->getListen('test')
+            $this->config->getListen('test')
         );
 
-        $config->removeListen('test');
+        $this->config->removeListen('test');
 
         $this->assertFalse(
-            $config->listenExists('test')
+            $this->config->listenExists('test')
         );
     }
 
     public function testAddFrontend()
     {
-        $config = Config::create()
-            ->addFrontend(new Frontend('test'))
-        ;
+        $this->config->addFrontend(new Frontend('test'));
 
         $this->assertTrue(
-            $config->frontendExists('test')
+            $this->config->frontendExists('test')
         );
         $this->assertInstanceOf(
             'HAProxy\Config\Proxy\Frontend',
-            $config->getFrontend('test')
+            $this->config->getFrontend('test')
         );
     }
 
     public function testRemoveFrontend()
     {
-        $config = Config::create()
-            ->addFrontend(new Frontend('test'))
-        ;
+        $this->config->addFrontend(new Frontend('test'));
 
         $this->assertInstanceOf(
             'HAProxy\Config\Proxy\Frontend',
-            $config->getFrontend('test')
+            $this->config->getFrontend('test')
         );
 
-        $config->removeFrontend('test');
+        $this->config->removeFrontend('test');
 
         $this->assertFalse(
-            $config->frontendExists('test')
+            $this->config->frontendExists('test')
         );
     }
 
     public function testAddBackend()
     {
-        $config = Config::create()
-            ->addBackend(new Backend('test'))
-        ;
+        $this->config->addBackend(new Backend('test'));
 
         $this->assertTrue(
-            $config->backendExists('test')
+            $this->config->backendExists('test')
         );
         $this->assertInstanceOf(
             'HAProxy\Config\Proxy\Backend',
-            $config->getBackend('test')
+            $this->config->getBackend('test')
         );
     }
 
     public function testRemoveBackend()
     {
-        $config = Config::create()
-            ->addBackend(new Backend('test'))
-        ;
+        $this->config->addBackend(new Backend('test'));
 
         $this->assertInstanceOf(
             'HAProxy\Config\Proxy\Backend',
-            $config->getBackend('test')
+            $this->config->getBackend('test')
         );
 
-        $config->removeBackend('test');
+        $this->config->removeBackend('test');
 
         $this->assertFalse(
-            $config->backendExists('test')
+            $this->config->backendExists('test')
         );
     }
 
@@ -243,7 +225,7 @@ interfaces and forwarding requests to a single backend "servers" with a
 single server "server1" listening on 127.0.0.1:8000
 TEXT;
 
-        $config = (string) Config::create()
+        $config = (string) $this->config
             ->addComment(
                 new Comment($comment)
             )
@@ -280,7 +262,7 @@ TEXT;
 
     public function testCreateFromFile()
     {
-        $config = Config::create()
+        $this->config
             ->addComment(
                 new Comment('Simple configuration for an HTTP proxy listening on port 80 on all')
             )
@@ -320,16 +302,15 @@ TEXT;
 
         $configFromFile = Config::fromFile('tests/haproxy.conf');
 
-        $this->assertEquals($config, $configFromFile);
+        $this->assertEquals($this->config, $configFromFile);
     }
 
     public function testSaveToFile()
     {
         vfsStreamWrapper::register();
         vfsStreamWrapper::setRoot(new vfsStreamDirectory('tmp'));
-
-        $config = new Config();
-        $config->saveToFile(vfsStream::url('tmp') . '/haproxy.conf');
+    
+        $this->config->saveToFile(vfsStream::url('tmp') . '/haproxy.conf');
 
         $this->assertTrue(vfsStreamWrapper::getRoot()->hasChild('haproxy.conf'));
     }
@@ -339,7 +320,6 @@ TEXT;
         $this->expectException('\HAProxy\Config\Exception\FileException');
         $this->expectExceptionMessage('Cannot open file "this/path/does/not/exist.conf" for writing.');
 
-        $config = new Config();
-        $config->saveToFile('this/path/does/not/exist.conf');
+        $this->config->saveToFile('this/path/does/not/exist.conf');
     }
 }
