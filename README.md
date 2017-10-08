@@ -1,11 +1,11 @@
 HAProxy Config Processor
 ========================
 
-[![Build Status](https://travis-ci.org/malc0mn/vultr-api-client.svg?branch=master)](https://travis-ci.org/malc0mn/vultr-api-client)
-[![Latest Stable Version](https://poser.pugx.org/malc0mn/vultr-api-client/v/stable)](https://packagist.org/packages/malc0mn/vultr-api-client)
-[![Total Downloads](https://poser.pugx.org/malc0mn/vultr-api-client/downloads)](https://packagist.org/packages/malc0mn/vultr-api-client)
-[![Latest Unstable Version](https://poser.pugx.org/malc0mn/vultr-api-client/v/unstable)](https://packagist.org/packages/malc0mn/vultr-api-client)
-[![License](https://poser.pugx.org/malc0mn/vultr-api-client/license)](https://packagist.org/packages/malc0mn/vultr-api-client)
+[![Build Status](https://travis-ci.org/malc0mn/haproxy-config-processor.svg?branch=master)](https://travis-ci.org/malc0mn/haproxy-config-processor)
+[![Latest Stable Version](https://poser.pugx.org/malc0mn/haproxy-config-processor/v/stable)](https://packagist.org/packages/malc0mn/haproxy-config-processor)
+[![Total Downloads](https://poser.pugx.org/malc0mn/haproxy-config-processor/downloads)](https://packagist.org/packages/malc0mn/haproxy-config-processor)
+[![Latest Unstable Version](https://poser.pugx.org/malc0mn/haproxy-config-processor/v/unstable)](https://packagist.org/packages/malc0mn/haproxy-config-processor)
+[![License](https://poser.pugx.org/malc0mn/haproxy-config-processor/license)](https://packagist.org/packages/malc0mn/haproxy-config-processor)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/6b5c0f4f-28db-4714-bb47-9f92ed8f7fbf/mini.png)](https://insight.sensiolabs.com/projects/24e6faf8-0baa-4bf8-a921-77b24e84faa3)
 
 
