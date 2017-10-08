@@ -192,7 +192,6 @@ class UserlistTest extends TestCase
         $this->expectException('HAProxy\Config\Exception\InvalidParameterException');
         $this->expectExceptionMessage('Adding separate parameters on a user list is not allowed!');
 
-        $defaults = new Userlist('test');
-        $defaults->addParameter('mode', 'http');
+        $this->userlist->addParameter('mode', 'http');
     }
 }
