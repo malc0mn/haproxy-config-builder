@@ -1,0 +1,71 @@
+<?php
+
+namespace HAProxy\Config\Proxy;
+
+class Defaults extends Proxy
+{
+    /**
+     * Proxy constructor.
+     *
+     * @param string $name
+     */
+    public function __construct($name = null)
+    {
+        parent::__construct($name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getType()
+    {
+        return 'defaults';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Build the class with the proper constructor.
+     *
+     * @param array $line
+     *
+     * @return static
+     */
+    protected static function buildClass(array $line)
+    {
+        if (count($line) > 1) {
+            return new static($line[1]);
+        }
+        return new static();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function bind($fqdnOrIp, $port)
+    {
+        $this->throwInvalidParam(__FUNCTION__);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addAcl($name, $options)
+    {
+        $this->throwInvalidParam('acl');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addServer($name, $fqdnOrIp, $port = null, $options = [])
+    {
+        $this->throwInvalidParam('server');
+    }
+}

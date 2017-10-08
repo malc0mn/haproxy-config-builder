@@ -1,0 +1,30 @@
+{
+    "name": "malc0mn/haproxy-config-builder",
+    "description": "Haproxy config file builder and processor.",
+    "type": "library",
+    "homepage": "https://github.com/malc0mn/haproxy-config-builder",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "malc0mn",
+            "email": "malc0mn@advalvas.be"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=4.8",
+        "mikey179/vfsStream": "~1"
+    },
+    "autoload": {
+        "psr-4": {
+            "HAProxy\\Config\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
