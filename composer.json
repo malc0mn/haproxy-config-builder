@@ -1,6 +1,6 @@
 {
     "name": "malc0mn/haproxy-config-builder",
-    "description": "Haproxy config file builder and processor.",
+    "description": "HAProxy config file builder and processor.",
     "type": "library",
     "homepage": "https://github.com/malc0mn/haproxy-config-builder",
     "license": "MIT",
