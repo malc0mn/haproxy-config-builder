@@ -91,6 +91,22 @@ abstract class Proxy extends Parambag
     }
 
     /**
+     * @return bool
+     */
+    public function hasBind()
+    {
+        return $this->parameterExists('bind');
+    }
+
+    /**
+     * @return static
+     */
+    public function removeBind()
+    {
+        return $this->removeParameter('bind');
+    }
+
+    /**
      * @param string $name
      * @param string $fqdnOrIp
      * @param int|null $port

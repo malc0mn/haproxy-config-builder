@@ -30,4 +30,20 @@ class Backend extends Proxy
     {
         $this->throwInvalidParam(__FUNCTION__);
     }
+
+    /**
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
+     */
+    public function hasBind()
+    {
+        $this->throwInvalidParam(__FUNCTION__);
+    }
+
+    /**
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
+     */
+    public function removeBind()
+    {
+        $this->throwInvalidParam(__FUNCTION__);
+    }
 }

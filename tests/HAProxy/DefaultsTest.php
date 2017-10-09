@@ -32,6 +32,24 @@ class DefaultsTest extends TestCase
         $defaults->bind('*', 22);
     }
 
+    public function testHasBind()
+    {
+        $this->expectException('HAProxy\Config\Exception\InvalidParameterException');
+        $this->expectExceptionMessage('Bind is not allowed on a defaults proxy block!');
+
+        $defaults = new Defaults('test');
+        $defaults->hasBind();
+    }
+
+    public function testRemoveBind()
+    {
+        $this->expectException('HAProxy\Config\Exception\InvalidParameterException');
+        $this->expectExceptionMessage('Bind is not allowed on a defaults proxy block!');
+
+        $defaults = new Defaults('test');
+        $defaults->removeBind();
+    }
+
     public function testAddAcl()
     {
         $this->expectException('HAProxy\Config\Exception\InvalidParameterException');

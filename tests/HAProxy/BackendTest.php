@@ -29,6 +29,26 @@ class BackendTest extends TestCase
         ;
     }
 
+    public function testHasBind()
+    {
+        $this->expectException('HAProxy\Config\Exception\InvalidParameterException');
+        $this->expectExceptionMessage('Bind is not allowed on a backend proxy block!');
+
+        Backend::create('test')
+            ->hasBind()
+        ;
+    }
+
+    public function testRemoveBind()
+    {
+        $this->expectException('HAProxy\Config\Exception\InvalidParameterException');
+        $this->expectExceptionMessage('Bind is not allowed on a backend proxy block!');
+
+        Backend::create('test')
+            ->removeBind()
+        ;
+    }
+
     public function testName()
     {
         $backend = Backend::create('www_backend');
