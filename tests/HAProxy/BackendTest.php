@@ -55,6 +55,23 @@ class BackendTest extends TestCase
         );
     }
 
+    public function testRemoveServer()
+    {
+        $backend = Backend::create('www_backend')
+            ->addServer('container', '127.0.0.1', 80, ['maxconn', 32])
+        ;
+
+        $this->assertTrue(
+            $backend->serverExists('container')
+        );
+
+        $backend->removeServer('container');
+
+        $this->assertFalse(
+            $backend->serverExists('container')
+        );
+    }
+
     public function testAddAclString()
     {
         $backend = Backend::create('www_backend')
@@ -84,6 +101,23 @@ class BackendTest extends TestCase
         $this->assertEquals(
             ['hdr(Host)', '-i', 'example.com'],
             $backend->getAclDetails('is_host_com')
+        );
+    }
+
+    public function testRemoveAcl()
+    {
+        $backend = Backend::create('www_backend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+        ;
+
+        $this->assertTrue(
+            $backend->aclExists('is_host_com')
+        );
+
+        $backend->removeAcl('is_host_com');
+
+        $this->assertFalse(
+            $backend->aclExists('is_host_com')
         );
     }
 }

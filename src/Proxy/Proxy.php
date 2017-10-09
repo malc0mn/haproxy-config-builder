@@ -112,6 +112,16 @@ abstract class Proxy extends Parambag
     }
 
     /**
+     * @param string $name
+     *
+     * @return static
+     */
+    public function removeServer($name)
+    {
+        return $this->removeParameter("server $name");
+    }
+
+    /**
      * Check if the given server exists.
      *
      * @param string$name
@@ -146,6 +156,16 @@ abstract class Proxy extends Parambag
         $this->addParameter("acl $name", $options);
 
         return $this;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return static
+     */
+    public function removeAcl($name)
+    {
+        return $this->removeParameter("acl $name");
     }
 
     /**

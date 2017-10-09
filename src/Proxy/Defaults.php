@@ -54,7 +54,38 @@ class Defaults extends Proxy
     }
 
     /**
-     * {@inheritdoc}
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
+     */
+    public function addServer($name, $fqdnOrIp, $port = null, $options = [])
+    {
+        $this->throwInvalidParam('server');
+    }
+
+    /**
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
+     */
+    public function serverExists($name)
+    {
+        $this->throwInvalidParam('server');
+    }
+
+    /**
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
+     */
+    public function getServerDetails($name)
+    {
+        $this->throwInvalidParam('server');
+    }
+
+    /**
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
+     */
+    public function removeServer($name)
+    {
+        $this->throwInvalidParam('server');
+    }
+    /**
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
      */
     public function addAcl($name, $options)
     {
@@ -64,8 +95,24 @@ class Defaults extends Proxy
     /**
      * @throws \HAProxy\Config\Exception\InvalidParameterException
      */
-    public function addServer($name, $fqdnOrIp, $port = null, $options = [])
+    public function aclExists($name)
     {
-        $this->throwInvalidParam('server');
+        $this->throwInvalidParam('acl');
+    }
+
+    /**
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
+     */
+    public function getAclDetails($name)
+    {
+        $this->throwInvalidParam('acl');
+    }
+
+    /**
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
+     */
+    public function removeAcl($name)
+    {
+        $this->throwInvalidParam('acl');
     }
 }
