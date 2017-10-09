@@ -46,7 +46,7 @@ class Defaults extends Proxy
     }
 
     /**
-     * {@inheritdoc}
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
      */
     public function bind($fqdnOrIp, $port)
     {
@@ -62,7 +62,7 @@ class Defaults extends Proxy
     }
 
     /**
-     * {@inheritdoc}
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
      */
     public function addServer($name, $fqdnOrIp, $port = null, $options = [])
     {

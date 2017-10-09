@@ -84,7 +84,7 @@ class Text
      *
      * @return string The current character (under the pointer).
      *
-     * @throws TextException When out of range
+     * @throws TextException
      */
     public function getChar($position = self::CURRENT_POSITION)
     {

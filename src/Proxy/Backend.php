@@ -24,7 +24,7 @@ class Backend extends Proxy
     }
 
     /**
-     * {@inheritdoc}
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
      */
     public function bind($fqdnOrIp, $port)
     {

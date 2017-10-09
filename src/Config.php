@@ -60,18 +60,27 @@ class Config extends Printable
     {
         $handle = @fopen($filePath, 'w');
         if (false === $handle) {
-            throw new FileException(sprintf('Cannot open file "%s" for writing.', $filePath));
+            throw new FileException(sprintf(
+                'Cannot open file "%s" for writing.',
+                $filePath
+            ));
         }
 
         $bytesWritten = @fwrite($handle, (string)$this);
         if (false === $bytesWritten) {
             fclose($handle);
-            throw new FileException(sprintf('Cannot write into file "%s".', $filePath));
+            throw new FileException(sprintf(
+                'Cannot write to file "%s".',
+                $filePath
+            ));
         }
 
         $closed = @fclose($handle);
         if (false === $closed) {
-            throw new FileException(sprintf('Cannot close file handle for "%s".', $filePath));
+            throw new FileException(sprintf(
+                'Cannot close file handle for "%s".',
+                $filePath
+            ));
         }
     }
 
@@ -89,8 +98,8 @@ class Config extends Printable
      * Create new Config from the configuration string.
      *
      * @param Text $configString
+     *
      * @return Config
-     * @throws Exception
      */
     public static function fromString(Text $configString)
     {
