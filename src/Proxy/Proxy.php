@@ -91,6 +91,14 @@ abstract class Proxy extends Parambag
     }
 
     /**
+     * @return static
+     */
+    public function removeBind()
+    {
+        return $this->removeParameter('bind');
+    }
+
+    /**
      * @return bool
      */
     public function hasBind()
@@ -99,11 +107,13 @@ abstract class Proxy extends Parambag
     }
 
     /**
-     * @return static
+     * Get the details for the bind keyword.
+     *
+     * @return array|null
      */
-    public function removeBind()
+    public function getBindDetails()
     {
-        return $this->removeParameter('bind');
+        return $this->hasBind() ? $this->getParameter('bind') : null;
     }
 
     /**
