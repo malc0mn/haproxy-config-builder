@@ -14,7 +14,7 @@ HAProxy Config Processor
 Open a shell, `cd` to your poject and type:
 
 ```sh
-composer require malc0mn/haproxy-config-builder dev-master
+composer require malc0mn/haproxy-config-builder
 ```
 
 or edit composer.json and add:
