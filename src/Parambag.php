@@ -45,7 +45,7 @@ abstract class Parambag extends Printable
      */
     public static function fromString(Text $configString)
     {
-        $line = explode(' ', trim($configString->getRestOfTheLine()), 2);
+        $line = explode(' ', self::cleanLine($configString->getRestOfTheLine()), 2);
 
         $class = static::buildclass($line);
 
@@ -54,7 +54,7 @@ abstract class Parambag extends Printable
 
         while ($configString->eof() === false) {
             // Split after the first space encountered.
-            $line = explode(' ', trim($configString->getRestOfTheLine()));
+            $line = explode(' ', self::cleanLine($configString->getRestOfTheLine()));
 
             // Return the new class if we encounter a new section.
             if (self::isSection($line[0])) {
@@ -88,6 +88,18 @@ abstract class Parambag extends Printable
             return new static($line[1]);
         }
         return new static();
+    }
+
+    /**
+     * Helper function to reduce all spaces to a single space.
+     *
+     * @param string $line
+     *
+     * @return mixed
+     */
+    protected static function cleanLine($line)
+    {
+        return preg_replace('!\s+!', ' ', trim($line));
     }
 
     /**
