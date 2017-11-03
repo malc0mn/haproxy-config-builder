@@ -26,12 +26,12 @@ class ListenTest extends TestCase
         ;
 
         $this->assertTrue(
-            $listen->hasBind()
+            $listen->hasBind('127.0.0.1')
         );
 
         $this->assertEquals(
-            ['127.0.0.1:22'],
-            $listen->getBindDetails()
+            [':22'],
+            $listen->getBindDetails('127.0.0.1')
         );
     }
 

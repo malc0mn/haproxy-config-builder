@@ -244,6 +244,7 @@ TEXT;
             ->addFrontend(
                 Frontend::create('http-in')
                     ->bind('*', 80)
+                    ->bind('::', 80)
                     ->addParameter('default_backend', 'servers')
                     ->addAcl('login_page', ['url_beg', '/login'])
             )
@@ -287,6 +288,7 @@ TEXT;
             ->addFrontend(
                 Frontend::create('http-in')
                     ->bind('*', 80)
+                    ->bind('::', 80)
                     ->addParameter('default_backend', 'servers')
                     ->addAcl('login_page', ['url_beg', '/login'])
             )
@@ -309,7 +311,7 @@ TEXT;
     {
         vfsStreamWrapper::register();
         vfsStreamWrapper::setRoot(new vfsStreamDirectory('tmp'));
-    
+
         $this->config->saveToFile(vfsStream::url('tmp') . '/haproxy.conf');
 
         $this->assertTrue(vfsStreamWrapper::getRoot()->hasChild('haproxy.conf'));

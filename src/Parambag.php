@@ -212,7 +212,11 @@ abstract class Parambag extends Printable
         $indent = $this->indent($indentLevel, $spacesPerIndent);
 
         foreach ($this->parameters as $keyword => $params) {
-            $text .= $indent . $keyword . ' ' . implode(' ', $params) . "\n";
+            $glue = ' ';
+            if (stripos($keyword, 'bind') === 0) {
+                $glue = '';
+            }
+            $text .= $indent . trim($keyword . $glue . implode(' ', $params)) . "\n";
         }
 
         if (!empty($text)) {

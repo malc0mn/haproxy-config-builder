@@ -34,7 +34,7 @@ class Backend extends Proxy
     /**
      * @throws \HAProxy\Config\Exception\InvalidParameterException
      */
-    public function hasBind()
+    public function hasBind($fqdnOrIp = '*')
     {
         $this->throwInvalidParam(__FUNCTION__);
     }
@@ -42,7 +42,7 @@ class Backend extends Proxy
     /**
      * @throws \HAProxy\Config\Exception\InvalidParameterException
      */
-    public function removeBind()
+    public function removeBind($fqdnOrIp = '*')
     {
         $this->throwInvalidParam(__FUNCTION__);
     }

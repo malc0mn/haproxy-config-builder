@@ -53,13 +53,20 @@ abstract class Proxy extends Parambag
                     break;
                 case 'bind':
                     $host = explode(':', $line[1]);
-                    if (count($host) != 2) {
+                    if (count($host) < 2) {
                         throw new TextException(sprintf(
                             'Invalid bind parameters for %s "%s"',
                             $class->getType(), $class->getName()
                         ));
                     }
-                    $class->bind($host[0], $host[1]);
+                    if (count($host) === 2) {
+                        // IPv4.
+                        $class->bind($host[0], $host[1]);
+                    } else {
+                        // IPv6.
+                        $port = array_pop($host);
+                        $class->bind(implode($host, ':'), $port);
+                    }
                     break;
                 case 'server':
                     $host = explode(':', $line[2]);
@@ -85,35 +92,41 @@ abstract class Proxy extends Parambag
      */
     public function bind($fqdnOrIp, $port)
     {
-        $this->addParameter('bind', "$fqdnOrIp:$port");
+        $this->addParameter("bind $fqdnOrIp", ":$port");
 
         return $this;
     }
 
     /**
+     * @param string $fqdnOrIp
+     *
      * @return static
      */
-    public function removeBind()
+    public function removeBind($fqdnOrIp = '*')
     {
-        return $this->removeParameter('bind');
+        return $this->removeParameter("bind $fqdnOrIp");
     }
 
     /**
+     * @param string $fqdnOrIp
+     *
      * @return bool
      */
-    public function hasBind()
+    public function hasBind($fqdnOrIp = '*')
     {
-        return $this->parameterExists('bind');
+        return $this->parameterExists("bind $fqdnOrIp");
     }
 
     /**
      * Get the details for the bind keyword.
      *
+     * @param string $fqdnOrIp
+     *
      * @return array|null
      */
-    public function getBindDetails()
+    public function getBindDetails($fqdnOrIp = '*')
     {
-        return $this->hasBind() ? $this->getParameter('bind') : null;
+        return $this->hasBind($fqdnOrIp) ? $this->getParameter("bind $fqdnOrIp") : null;
     }
 
     /**
