@@ -47,6 +47,7 @@ class Config extends Printable
         $this->defaults = new Defaults();
         $this->userlists = [];
         $this->proxies = [];
+        $this->printables = [];
     }
 
     /**
