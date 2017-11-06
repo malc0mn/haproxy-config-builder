@@ -2,6 +2,7 @@
 
 namespace HAProxy\Config\Tests;
 
+use HAProxy\Config\Comment;
 use HAProxy\Config\Proxy\Frontend;
 use PHPUnit\Framework\TestCase;
 
@@ -123,6 +124,45 @@ class FrontendTest extends TestCase
 
         $this->assertFalse(
             $frontend->aclExists('is_host_com')
+        );
+    }
+
+    public function testSetComment()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+        ;
+
+        $this->assertFalse(
+            $frontend->hasComment()
+        );
+
+        $frontend->setComment(new Comment("Hello world, I'm a comment!"));
+
+        $this->assertTrue(
+            $frontend->hasComment()
+        );
+
+        $commend = $frontend->getComment();
+
+        $this->assertEquals(new Comment("Hello world, I'm a comment!"), $commend);
+    }
+
+    public function testRemoveComment()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->setComment(new Comment("Hello world, I'm a comment!"))
+        ;
+
+        $this->assertTrue(
+            $frontend->hasComment()
+        );
+
+        $frontend->removeComment();
+
+        $this->assertFalse(
+            $frontend->hasComment()
         );
     }
 }

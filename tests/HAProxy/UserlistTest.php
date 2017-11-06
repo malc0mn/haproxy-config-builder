@@ -2,6 +2,7 @@
 
 namespace HAProxy\Config\Tests;
 
+use HAProxy\Config\Comment;
 use HAProxy\Config\Userlist;
 use PHPUnit\Framework\TestCase;
 
@@ -193,5 +194,38 @@ class UserlistTest extends TestCase
         $this->expectExceptionMessage('Adding separate parameters on a user list is not allowed!');
 
         $this->userlist->addParameter('mode', 'http');
+    }
+
+    public function testSetComment()
+    {
+        $this->assertFalse(
+            $this->userlist->hasComment()
+        );
+
+        $this->userlist->setComment(new Comment("Hello world, I'm a comment!"));
+
+        $this->assertTrue(
+            $this->userlist->hasComment()
+        );
+
+        $commend = $this->userlist->getComment();
+
+        $this->assertEquals(new Comment("Hello world, I'm a comment!"), $commend);
+    }
+
+    public function testRemoveComment()
+    {
+        $this->userlist->setComment(new Comment("Hello world, I'm a comment!"))
+        ;
+
+        $this->assertTrue(
+            $this->userlist->hasComment()
+        );
+
+        $this->userlist->removeComment();
+
+        $this->assertFalse(
+            $this->userlist->hasComment()
+        );
     }
 }

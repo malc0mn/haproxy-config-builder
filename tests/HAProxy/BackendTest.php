@@ -2,6 +2,7 @@
 
 namespace HAProxy\Config\Tests;
 
+use HAProxy\Config\Comment;
 use HAProxy\Config\Proxy\Backend;
 use PHPUnit\Framework\TestCase;
 
@@ -138,6 +139,45 @@ class BackendTest extends TestCase
 
         $this->assertFalse(
             $backend->aclExists('is_host_com')
+        );
+    }
+
+    public function testSetComment()
+    {
+        $backend = Backend::create('www_backend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+        ;
+
+        $this->assertFalse(
+            $backend->hasComment()
+        );
+
+        $backend->setComment(new Comment("Hello world, I'm a comment!"));
+
+        $this->assertTrue(
+            $backend->hasComment()
+        );
+
+        $commend = $backend->getComment();
+
+        $this->assertEquals(new Comment("Hello world, I'm a comment!"), $commend);
+    }
+
+    public function testRemoveComment()
+    {
+        $backend = Backend::create('www_backend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->setComment(new Comment("Hello world, I'm a comment!"))
+        ;
+
+        $this->assertTrue(
+            $backend->hasComment()
+        );
+
+        $backend->removeComment();
+
+        $this->assertFalse(
+            $backend->hasComment()
         );
     }
 }

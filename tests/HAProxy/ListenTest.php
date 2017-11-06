@@ -2,6 +2,7 @@
 
 namespace HAProxy\Config\Tests;
 
+use HAProxy\Config\Comment;
 use HAProxy\Config\Proxy\Listen;
 use PHPUnit\Framework\TestCase;
 
@@ -141,6 +142,45 @@ class ListenTest extends TestCase
 
         $this->assertFalse(
             $listen->aclExists('is_host_com')
+        );
+    }
+
+    public function testSetComment()
+    {
+        $listen = Listen::create('ssh')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+        ;
+
+        $this->assertFalse(
+            $listen->hasComment()
+        );
+
+        $listen->setComment(new Comment("Hello world, I'm a comment!"));
+
+        $this->assertTrue(
+            $listen->hasComment()
+        );
+
+        $commend = $listen->getComment();
+
+        $this->assertEquals(new Comment("Hello world, I'm a comment!"), $commend);
+    }
+
+    public function testRemoveComment()
+    {
+        $listen = Listen::create('ssh')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->setComment(new Comment("Hello world, I'm a comment!"))
+        ;
+
+        $this->assertTrue(
+            $listen->hasComment()
+        );
+
+        $listen->removeComment();
+
+        $this->assertFalse(
+            $listen->hasComment()
         );
     }
 }

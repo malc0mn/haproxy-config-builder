@@ -20,6 +20,11 @@ abstract class Parambag extends Printable
     protected $parameters;
 
     /**
+     * @var Comment
+     */
+    protected $comment;
+
+    /**
      * Returns the type of the parameter bag.
      *
      * @return string
@@ -216,12 +221,60 @@ abstract class Parambag extends Printable
     }
 
     /**
+     * Add comment to the top of a proxy block.
+     *
+     * @param Comment $comment
+     *
+     * @return $this
+     */
+    public function setComment(Comment $comment)
+    {
+        $this->comment = $comment;
+        return $this;
+    }
+
+    /**
+     * Get comment from proxy block.
+     *
+     * @return Comment
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Check if the proxy block has a comment.
+     *
+     * @return bool
+     */
+    public function hasComment()
+    {
+        return $this->comment !== null;
+    }
+
+    /**
+     * Remove comment from proxy block.
+     *
+     * @return $this
+     */
+    public function removeComment()
+    {
+        $this->comment = null;
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function prettyPrint($indentLevel, $spacesPerIndent = 4)
     {
         $text = '';
         $indent = $this->indent($indentLevel, $spacesPerIndent);
+
+        if ($this->hasComment()) {
+            $text .= $this->comment->prettyPrint($indentLevel, $spacesPerIndent);
+        }
 
         foreach ($this->parameters as $keyword => $params) {
             $glue = ' ';
