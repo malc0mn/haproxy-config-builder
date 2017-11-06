@@ -270,10 +270,11 @@ abstract class Parambag extends Printable
     public function prettyPrint($indentLevel, $spacesPerIndent = 4)
     {
         $text = '';
+        $comment = '';
         $indent = $this->indent($indentLevel, $spacesPerIndent);
 
         if ($this->hasComment()) {
-            $text .= $this->comment->prettyPrint($indentLevel, $spacesPerIndent);
+            $comment = $this->comment->prettyPrint($indentLevel, $spacesPerIndent);
         }
 
         foreach ($this->parameters as $keyword => $params) {
@@ -286,7 +287,7 @@ abstract class Parambag extends Printable
 
         if (!empty($text)) {
             // No indent here.
-            $text = $this->getType() . ($this->getName() ? ' ' . $this->getName() : '') . "\n" . $text . "\n";
+            $text = $comment . $this->getType() . ($this->getName() ? ' ' . $this->getName() : '') . "\n" . $text . "\n";
         }
 
         return $text;
