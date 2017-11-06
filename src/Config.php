@@ -2,7 +2,6 @@
 
 namespace HAProxy\Config;
 
-use HAProxy\Config\Exception\Exception;
 use HAProxy\Config\Exception\FileException;
 use HAProxy\Config\Proxy\Defaults;
 use HAProxy\Config\Proxy\Backend;
