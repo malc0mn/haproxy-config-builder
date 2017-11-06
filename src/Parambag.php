@@ -274,7 +274,7 @@ abstract class Parambag extends Printable
         $indent = $this->indent($indentLevel, $spacesPerIndent);
 
         if ($this->hasComment()) {
-            $comment = $this->comment->prettyPrint($indentLevel, $spacesPerIndent);
+            $comment = $this->comment->prettyPrint($indentLevel-1, $spacesPerIndent);
         }
 
         foreach ($this->parameters as $keyword => $params) {
