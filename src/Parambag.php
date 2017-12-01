@@ -25,6 +25,11 @@ abstract class Parambag extends Printable
     protected $comment;
 
     /**
+     * @var array
+     */
+    protected $allowDuplicate = ['timeout', 'reqrep'];
+
+    /**
      * Returns the type of the parameter bag.
      *
      * @return string
@@ -161,7 +166,7 @@ abstract class Parambag extends Printable
         $params = $this->toArray($params);
         // This is a bit of an odd exception. If you have a better way to handle
         // this one, create a pull request ;-)
-        if ($keyword == 'timeout') {
+        if (in_array($keyword, $this->allowDuplicate)) {
             $keyword = $keyword . ' ' . array_shift($params);
         }
         $this->parameters[$keyword] = $params;
