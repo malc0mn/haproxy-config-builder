@@ -99,7 +99,7 @@ var_export($configFromFile);
 By default, the builder output will be printed in the same order you have added
 parameters.
 This is not always desired, especially when working with ACLs that you want to
-be present in the output before you set the use_backend calls.
+be present in the output before you set the `use_backend` calls.
 
 To solve this issue, you can use the `setParameterOrder()` method to indicate
 the desired printing order. An exemple:
@@ -170,7 +170,8 @@ if ($config->listenExists('ssh')) {
 }
 ```
 
-Have a look at the classes to see what is at your disposal.
+Have a look at the classes to see what is at your disposal. A peek at the tests
+will give you a very good idea of what you can do with all available methods.
 
 ## Credits
 
