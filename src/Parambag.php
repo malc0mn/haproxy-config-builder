@@ -126,7 +126,7 @@ abstract class Parambag extends Printable
     protected static function handleLine($class, array $line)
     {
         if (!empty($line[0])) {
-            $class->addParameter($line[0], isset($line[1]) ? $line[1] : []);
+            $class->addParameter($line[0], array_slice($line, 1));
         }
     }
 

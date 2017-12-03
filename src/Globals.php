@@ -64,7 +64,7 @@ class Globals extends Parambag
         if (in_array($line[0], ['debug', 'quiet', 'daemon'])) {
             $class->{$line[0]}(true);
         } elseif (!empty($line[0])) {
-            $class->addParameter($line[0], isset($line[1]) ? $line[1] : []);
+            $class->addParameter($line[0], array_slice($line, 1));
         }
     }
 
