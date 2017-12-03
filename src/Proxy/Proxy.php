@@ -79,7 +79,7 @@ abstract class Proxy extends Parambag
                     $class->addServer($line[1], $host[0], $host[1], array_slice($line, 3));
                     break;
                 default:
-                    $class->addParameter($line[0], array_slice($line, 1));
+                    parent::handleLine($class, $line);
             }
         }
     }
