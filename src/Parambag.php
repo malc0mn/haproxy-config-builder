@@ -14,6 +14,8 @@ use HAProxy\Config\Exception\TextException;
  */
 abstract class Parambag extends Printable
 {
+    const EMPTY_LINE_KEY = '$emptyLine$';
+
     /**
      * @var array
      */
@@ -33,6 +35,11 @@ abstract class Parambag extends Printable
      * @var array
      */
     protected $allowDuplicate = ['timeout', 'reqrep'];
+
+    /**
+     * @var int
+     */
+    protected $emptyLineCounter = 0;
 
     /**
      * Returns the type of the parameter bag.
@@ -127,6 +134,8 @@ abstract class Parambag extends Printable
     {
         if (!empty($line[0])) {
             $class->addParameter($line[0], array_slice($line, 1));
+        } else {
+            $class->addEmptyLine();
         }
     }
 
@@ -275,6 +284,17 @@ abstract class Parambag extends Printable
     }
 
     /**
+     * Adds a placeholder to render an empty line.
+     *
+     * @return $this
+     */
+    public function addEmptyLine()
+    {
+        $this->addParameter(self::EMPTY_LINE_KEY . $this->emptyLineCounter++);
+        return $this;
+    }
+
+    /**
      * Set ordering of parameters.
      *
      * @param array $order
@@ -342,8 +362,13 @@ abstract class Parambag extends Printable
         }
 
         foreach ($this->getOrderedParameters() as $keyword => $params) {
+            if (stripos($keyword, self::EMPTY_LINE_KEY) === 0) {
+                $text .= "\n";
+                continue;
+            }
+
             $glue = ' ';
-            if (stripos($keyword, 'bind') === 0) {
+            if (stripos($keyword, 'bind ') === 0) {
                 $glue = '';
             }
             $text .= $indent . trim($keyword . $glue . implode(' ', $params)) . "\n";

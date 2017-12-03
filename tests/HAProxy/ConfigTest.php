@@ -246,8 +246,10 @@ TEXT;
                 Frontend::create('http-in')
                     ->bind('*', 80)
                     ->bind('::', 80)
-                    ->addParameter('default_backend', 'servers')
+                    ->addEmptyLine()
                     ->addAcl('login_page', ['url_beg', '/login'])
+                    ->addEmptyLine()
+                    ->addParameter('default_backend', 'servers')
             )
             ->addBackend(
                 Backend::create('servers')
