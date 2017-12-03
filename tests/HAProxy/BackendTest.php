@@ -207,7 +207,7 @@ class BackendTest extends TestCase
         $this->assertTrue(
             [
                 'mode' => ['http'],
-                'option' => ['forwardfor'],
+                'option forwardfor' => [],
                 'acl is_https' => ['hdr(X-Forwarded-Proto) -i https'],
                 'server localhost' => ['127.0.0.1:80'],
             ] === $backend->getOrderedParameters()
@@ -230,7 +230,7 @@ class BackendTest extends TestCase
             [
                 'mode' => ['http'],
                 '$emptyLine$0' => [],
-                'option' => ['forwardfor'],
+                'option forwardfor' => [],
                 '$emptyLine$1' => [],
                 'acl is_https' => ['hdr(X-Forwarded-Proto) -i https'],
                 '$emptyLine$2' => [],

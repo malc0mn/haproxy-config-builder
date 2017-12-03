@@ -243,7 +243,7 @@ class FrontendTest extends TestCase
             [
                 'bind *' => [':80'],
                 'mode' => ['http'],
-                'option' => ['forwardfor'],
+                'option forwardfor' => [],
                 'acl is_https' => ['hdr(X-Forwarded-Proto) -i https'],
                 'acl is_host_com' => ['hdr(Host) -i example.com'],
                 'use_backend host_com' => ['if is_host_com'],
@@ -273,7 +273,7 @@ class FrontendTest extends TestCase
                 '$emptyLine$0' => [],
                 'mode' => ['http'],
                 '$emptyLine$1' => [],
-                'option' => ['forwardfor'],
+                'option forwardfor' => [],
                 '$emptyLine$2' => [],
                 'acl is_https' => ['hdr(X-Forwarded-Proto) -i https'],
                 'acl is_host_com' => ['hdr(Host) -i example.com'],

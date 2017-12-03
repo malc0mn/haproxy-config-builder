@@ -39,7 +39,13 @@ abstract class Parambag extends Printable
     /**
      * @var array
      */
-    protected $allowDuplicate = ['timeout', 'reqrep'];
+    protected $allowDuplicate = [
+        'http-request' => 3,
+        'option' => 1,
+        'reqrep' => 1,
+        'stats' => 1,
+        'timeout' => 1,
+    ];
 
     /**
      * @var int
@@ -183,10 +189,11 @@ abstract class Parambag extends Printable
     public function addParameter($keyword, $params = [])
     {
         $params = $this->toArray($params);
-        // This is a bit of an odd exception. If you have a better way to handle
-        // this one, create a pull request ;-)
-        if (in_array($keyword, $this->allowDuplicate)) {
-            $keyword = $keyword . ' ' . array_shift($params);
+        // Handle keywords that can occur multiple times.
+        if (in_array($keyword, array_keys($this->allowDuplicate))) {
+            $oldKey = $keyword;
+            $keyword = $keyword . ' ' . implode(' ', array_slice($params, 0, $this->allowDuplicate[$oldKey]));
+            $params = array_slice($params, $this->allowDuplicate[$oldKey]);
         }
         $this->parameters[$keyword] = $params;
 

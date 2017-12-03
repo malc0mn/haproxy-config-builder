@@ -82,6 +82,7 @@ abstract class Proxy extends Parambag
                     parent::handleLine($class, $line);
             }
         }
+        // TODO: how to handle empty lines!?
     }
 
     /**
