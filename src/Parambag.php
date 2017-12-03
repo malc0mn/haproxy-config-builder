@@ -32,6 +32,11 @@ abstract class Parambag extends Printable
     protected $order;
 
     /**
+     * @var bool
+     */
+    protected $orderGroup = false;
+
+    /**
      * @var array
      */
     protected $allowDuplicate = ['timeout', 'reqrep'];
@@ -298,12 +303,16 @@ abstract class Parambag extends Printable
      * Set ordering of parameters.
      *
      * @param array $order
+     * @param bool $group Whether or not to 'group' the output by separating
+     *                    groups of parameters that start with the same keyword
+     *                    with an empty line
      *
      * @return $this
      */
-    public function setParameterOrder(array $order)
+    public function setParameterOrder(array $order, $group = false)
     {
         $this->order = array_fill_keys($order, null);
+        $this->orderGroup = $group;
         return $this;
     }
 
@@ -327,8 +336,12 @@ abstract class Parambag extends Printable
             $sorted = [];
             // We need to work on a copy since we will be unsetting stuff...
             $paramsCopy = $this->parameters;
-            // $_ as a means to indicate we wont be using this variable!
+
+            $i = 0;
+            $len = count($this->order);
+            // $_ as a means to indicate we won't be using this variable!
             foreach ($this->order as $key => $_) {
+                $i++;
                 foreach ($paramsCopy as $parameter => $options) {
                     // The stripos() approach is used as certain parameters can
                     // occur multiple times. For example:
@@ -340,6 +353,11 @@ abstract class Parambag extends Printable
                         $sorted[$parameter] = $paramsCopy[$parameter];
                         unset($paramsCopy[$parameter]);
                     }
+                }
+                // Add empty line after keyword 'group' when requested, except
+                // for the last one.
+                if ($i < $len && $this->orderGroup) {
+                    $sorted[self::EMPTY_LINE_KEY . $this->emptyLineCounter++] = [];
                 }
             }
 
