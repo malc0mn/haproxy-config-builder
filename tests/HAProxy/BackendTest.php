@@ -180,4 +180,37 @@ class BackendTest extends TestCase
             $backend->hasComment()
         );
     }
+
+    public function testSetParameterOrder()
+    {
+        $backend = Backend::create('www_backend');
+        $backend->setParameterOrder(['mode', 'option', 'acl', 'server']);
+
+        $this->assertEquals(
+            ['mode' => null, 'option' => null, 'acl' => null, 'server' => null],
+            $backend->getParameterOrder()
+        );
+    }
+
+    public function testGetOrderedParameters()
+    {
+        $backend = Backend::create('www_backend');
+        $backend->setParameterOrder(['mode', 'option', 'acl', 'server']);
+
+        $backend->addParameter('option', 'forwardfor');
+        $backend->addServer('localhost', '127.0.0.1', 80);
+        $backend->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https');
+        $backend->addParameter('mode', 'http');
+
+        // assertEquals gave weird results allowing the test to pass while the
+        // arrays were clearly QUITE different!
+        $this->assertTrue(
+            [
+                'mode' => ['http'],
+                'option' => ['forwardfor'],
+                'acl is_https' => ['hdr(X-Forwarded-Proto) -i https'],
+                'server localhost' => ['127.0.0.1:80'],
+            ] === $backend->getOrderedParameters()
+        );
+    }
 }

@@ -94,6 +94,60 @@ $configFromFile = Config::fromFile('/etc/haproxy/haproxy.conf');
 var_export($configFromFile);
 ```
 
+### Output ordering
+
+By default, the builder output will be printed in the same order you have added
+parameters.
+This is not always desired, especially when working with ACLs that you want to
+be present in the output before you set the use_backend calls.
+
+To solve this issue, you can use the `setParameterOrder()` method to indicate
+the desired printing order. An exemple:
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use HAProxy\Config\Proxy\Frontend;
+
+$frontend = Frontend::create('www_frontend')
+    ->setParameterOrder(['bind', 'mode', 'option', 'acl', 'use_backend', 'default_backend'])
+    ->addParameter('mode', 'http')
+    ->addParameter('default_backend', 'www_backend')
+    ->bind('*', 80)
+    ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+    ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+    ->addUseBackend('host_com', 'if is_host_com')
+    ->addParameter('option', 'forwardfor')
+;
+
+echo (string)$frontend;
+/*
+ frontend www_frontend
+ mode http
+ default_backend www_backend
+ bind *:80
+ acl is_https hdr(X-Forwarded-Proto) -i https
+ acl is_host_com hdr(Host) -i example.com
+ use_backend host_com if is_host_com
+ option forwardfor
+ */
+
+$frontend->setParameterOrder(['bind', 'mode', 'option', 'acl', 'use_backend', 'default_backend']);
+
+echo (string)$frontend;
+/*
+ frontend www_frontend
+ bind *:80
+ mode http
+ option forwardfor
+ acl is_https hdr(X-Forwarded-Proto) -i https
+ acl is_host_com hdr(Host) -i example.com
+ use_backend host_com if is_host_com
+ default_backend www_backend
+ */
+```
+
 ### Now what?
 
 Once you have the config, you can use the various helper methods to

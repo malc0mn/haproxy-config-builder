@@ -211,4 +211,44 @@ class FrontendTest extends TestCase
             $frontend->useBackendExists('www_backend')
         );
     }
+
+    public function testSetParameterOrder()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->setParameterOrder(['bind', 'mode', 'option', 'acl', 'use_backend', 'default_backend'])
+        ;
+
+        $this->assertEquals(
+            ['bind' => null, 'mode' => null, 'option' => null, 'acl' => null, 'use_backend' => null, 'default_backend' =>  null],
+            $frontend->getParameterOrder()
+        );
+    }
+
+    public function testGetOrderedParameters()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->setParameterOrder(['bind', 'mode', 'option', 'acl', 'use_backend', 'default_backend'])
+            ->addParameter('mode', 'http')
+            ->addParameter('default_backend', 'www_backend')
+            ->bind('*', 80)
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->addUseBackend('host_com', 'if is_host_com')
+            ->addParameter('option', 'forwardfor')
+        ;
+
+        // assertEquals gave weird results allowing the test to pass while the
+        // arrays were clearly QUITE different!
+        $this->assertTrue(
+            [
+                'bind *' => [':80'],
+                'mode' => ['http'],
+                'option' => ['forwardfor'],
+                'acl is_https' => ['hdr(X-Forwarded-Proto) -i https'],
+                'acl is_host_com' => ['hdr(Host) -i example.com'],
+                'use_backend host_com' => ['if is_host_com'],
+                'default_backend' => ['www_backend'],
+            ] === $frontend->getOrderedParameters()
+        );
+    }
 }

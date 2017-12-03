@@ -27,6 +27,11 @@ abstract class Parambag extends Printable
     /**
      * @var array
      */
+    protected $order;
+
+    /**
+     * @var array
+     */
     protected $allowDuplicate = ['timeout', 'reqrep'];
 
     /**
@@ -270,6 +275,60 @@ abstract class Parambag extends Printable
     }
 
     /**
+     * Set ordering of parameters.
+     *
+     * @param array $order
+     *
+     * @return $this
+     */
+    public function setParameterOrder(array $order)
+    {
+        $this->order = array_fill_keys($order, null);
+        return $this;
+    }
+
+    /**
+     * Get parameter ordering.
+     *
+     * @return array
+     */
+    public function getParameterOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * Order the parameters as requested.
+     *
+     * @return array
+     */
+    public function getOrderedParameters() {
+        if (!empty($this->order)) {
+            $sorted = [];
+            // We need to work on a copy since we will be unsetting stuff...
+            $paramsCopy = $this->parameters;
+            // $_ as a means to indicate we wont be using this variable!
+            foreach ($this->order as $key => $_) {
+                foreach ($paramsCopy as $parameter => $options) {
+                    // The stripos() approach is used as certain parameters can
+                    // occur multiple times. For example:
+                    //   the user requests order ['acl', 'use_backend'], so we
+                    //   need to look for ALL ACLs whose keys will be
+                    //   'acl [name]' which is why we cannot just compare the
+                    //   keys alone.
+                    if ($key === $parameter || stripos($parameter, "$key ") === 0) {
+                        $sorted[$parameter] = $paramsCopy[$parameter];
+                        unset($paramsCopy[$parameter]);
+                    }
+                }
+            }
+
+            return array_merge($sorted, $paramsCopy);
+        }
+        return $this->parameters;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function prettyPrint($indentLevel, $spacesPerIndent = 4)
@@ -282,7 +341,7 @@ abstract class Parambag extends Printable
             $comment = $this->comment->prettyPrint($indentLevel-1, $spacesPerIndent);
         }
 
-        foreach ($this->parameters as $keyword => $params) {
+        foreach ($this->getOrderedParameters() as $keyword => $params) {
             $glue = ' ';
             if (stripos($keyword, 'bind') === 0) {
                 $glue = '';
