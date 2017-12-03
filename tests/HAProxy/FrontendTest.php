@@ -165,4 +165,50 @@ class FrontendTest extends TestCase
             $frontend->hasComment()
         );
     }
+
+    public function testAddUseBackend()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addUseBackend('https_backend', 'if is_https')
+            ->addUseBackend('www_backend', 'if is_host_com')
+        ;
+
+        $this->assertTrue(
+            $frontend->useBackendExists('www_backend')
+        );
+
+        $this->assertTrue(
+            $frontend->useBackendExists('https_backend')
+        );
+
+        $this->assertEquals(
+            ['if is_host_com'],
+            $frontend->getUseBackendDetails('www_backend')
+        );
+
+        $this->assertEquals(
+            ['if is_https'],
+            $frontend->getUseBackendDetails('https_backend')
+        );
+    }
+
+    public function testRemoveUseBackend()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->addUseBackend('www_backend', 'if is_host_com')
+        ;
+
+        $this->assertTrue(
+            $frontend->useBackendExists('www_backend')
+        );
+
+        $frontend->removeUseBackend('www_backend');
+
+        $this->assertFalse(
+            $frontend->useBackendExists('www_backend')
+        );
+    }
 }
