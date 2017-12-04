@@ -497,11 +497,15 @@ class Config extends Printable
         $prioritised = $this->proxies;
 
         usort($prioritised, function(Proxy $a, Proxy $b) {
-            if ($a->getPrintPriority() == $b->getPrintPriority()) {
-                return 0;
+            // This might seem a bit strange, but it will ensure a consistent
+            // sorting order all the way from PHP 4.x up to 7.x!
+            if ($a->getPrintPriority() > $b->getPrintPriority()) {
+                return 1;
             }
-
-            return ($a->getPrintPriority() < $b->getPrintPriority()) ? -1 : 1;
+            if ($a->getPrintPriority() < $b->getPrintPriority()) {
+                return -1;
+            }
+            return 0;
         });
 
         return $prioritised;
