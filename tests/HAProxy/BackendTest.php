@@ -217,7 +217,13 @@ class BackendTest extends TestCase
     public function testGetOrderedParametersWithGrouping()
     {
         $backend = Backend::create('www_backend');
-        $backend->setParameterOrder(['mode', 'reqidel', 'option', 'acl', 'server'], true);
+        $backend->setParameterOrder([
+            'mode' => false,
+            'reqidel' => false,
+            'option' => true,
+            'acl' => true,
+            'server' => false,
+        ]);
 
         $backend->addParameter('option', 'forwardfor');
         $backend->addServer('localhost', '127.0.0.1', 80);
@@ -229,11 +235,10 @@ class BackendTest extends TestCase
         $this->assertTrue(
             [
                 'mode' => ['http'],
-                '$emptyLine$0' => [],
                 'option forwardfor' => [],
-                '$emptyLine$1' => [],
+                '$emptyLine$0' => [],
                 'acl is_https' => ['hdr(X-Forwarded-Proto) -i https'],
-                '$emptyLine$2' => [],
+                '$emptyLine$1' => [],
                 'server localhost' => ['127.0.0.1:80'],
             ] === $backend->getOrderedParameters()
         );

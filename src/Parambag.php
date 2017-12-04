@@ -32,11 +32,6 @@ abstract class Parambag extends Printable
     protected $order;
 
     /**
-     * @var bool
-     */
-    protected $orderGroup = false;
-
-    /**
      * @var array
      */
     protected $allowDuplicate = [
@@ -309,17 +304,25 @@ abstract class Parambag extends Printable
     /**
      * Set ordering of parameters.
      *
-     * @param array $order
-     * @param bool $group Whether or not to 'group' the output by separating
-     *                    groups of parameters that start with the same keyword
-     *                    with an empty line
+     * @param array $order A single dimensional array containing the keywords in
+     *                     the order you want them to be rendered.
+     *                       OR
+     *                     A multi dimensional array containing the keywords in
+     *                     the order you want them to be rendered AS KEY and the
+     *                     value set to TRUE or FALSE indicating to add a
+     *                     a trailing empty line after the 'block' of keywords.
      *
      * @return $this
      */
-    public function setParameterOrder(array $order, $group = false)
+    public function setParameterOrder(array $order)
     {
-        $this->order = array_fill_keys($order, null);
-        $this->orderGroup = $group;
+        $this->order = $order;
+
+        $grouping = array_filter($order,'is_bool');
+        if (count($grouping) === 0) {
+            $this->order = array_fill_keys($order, false);
+        }
+
         return $this;
     }
 
@@ -347,8 +350,7 @@ abstract class Parambag extends Printable
             $i = 0;
             $emptyLines = 0;
             $len = count($this->order);
-            // $_ as a means to indicate we won't be using this variable!
-            foreach ($this->order as $key => $_) {
+            foreach ($this->order as $key => $trailingEmptyLine) {
                 $i++;
                 $found = false;
                 foreach ($paramsCopy as $parameter => $options) {
@@ -366,7 +368,7 @@ abstract class Parambag extends Printable
                 }
                 // Add empty line after keyword 'group' when requested, except
                 // for the last one.
-                if ($found && $i < $len && $this->orderGroup) {
+                if ($found && $i < $len && $trailingEmptyLine) {
                     $sorted[self::EMPTY_LINE_KEY . $emptyLines++] = [];
                 }
             }

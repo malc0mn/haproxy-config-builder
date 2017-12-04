@@ -111,7 +111,6 @@ require 'vendor/autoload.php';
 use HAProxy\Config\Proxy\Frontend;
 
 $frontend = Frontend::create('www_frontend')
-    ->setParameterOrder(['bind', 'mode', 'option', 'acl', 'use_backend', 'default_backend'])
     ->addParameter('mode', 'http')
     ->addParameter('default_backend', 'www_backend')
     ->bind('*', 80)
@@ -144,6 +143,31 @@ echo (string)$frontend;
  acl is_https hdr(X-Forwarded-Proto) -i https
  acl is_host_com hdr(Host) -i example.com
  use_backend host_com if is_host_com
+ default_backend www_backend
+ */
+
+// Whitespace control:
+$frontend->setParameterOrder([
+    'bind' => false,
+    'mode' => false,
+    'option' => true, // Add trailing whitespace!
+    'acl' => true, // Add trailing whitespace!
+    'use_backend' => true, // Add trailing whitespace!
+    'default_backend',
+]);
+
+echo (string)$frontend;
+/*
+ frontend www_frontend
+ bind *:80
+ mode http
+ option forwardfor
+
+ acl is_https hdr(X-Forwarded-Proto) -i https
+ acl is_host_com hdr(Host) -i example.com
+
+ use_backend host_com if is_host_com
+
  default_backend www_backend
  */
 ```
