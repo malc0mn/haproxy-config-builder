@@ -96,6 +96,19 @@ class ListenTest extends TestCase
         );
     }
 
+    public function testCountServers()
+    {
+        $listen = Listen::create('www_listen')
+            ->addServer('container1', '127.0.0.1', 22, ['maxconn', 32])
+        ;
+
+        $this->assertEquals(1, $listen->countServers());
+
+        $listen->addServer('container2', '127.0.0.1', 222, ['maxconn', 32]);
+
+        $this->assertEquals(2, $listen->countServers());
+    }
+
     public function testAddAclString()
     {
         $listen = Listen::create('ssh')

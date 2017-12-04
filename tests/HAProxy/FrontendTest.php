@@ -78,6 +78,16 @@ class FrontendTest extends TestCase
         ;
     }
 
+    public function testCountServers()
+    {
+        $this->expectException('HAProxy\Config\Exception\InvalidParameterException');
+        $this->expectExceptionMessage('Server is not allowed on a frontend proxy block!');
+
+        Frontend::create('www_frontend')
+            ->countServers()
+        ;
+    }
+
     public function testAddAclString()
     {
         $frontend = Frontend::create('www_frontend')

@@ -93,6 +93,19 @@ class BackendTest extends TestCase
         );
     }
 
+    public function testCountServers()
+    {
+        $backend = Backend::create('www_backend')
+            ->addServer('container1', '127.0.0.1', 80, ['maxconn', 32])
+        ;
+
+        $this->assertEquals(1, $backend->countServers());
+
+        $backend->addServer('container2', '127.0.0.1', 8080, ['maxconn', 32]);
+
+        $this->assertEquals(2, $backend->countServers());
+    }
+
     public function testAddAclString()
     {
         $backend = Backend::create('www_backend')

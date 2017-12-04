@@ -108,6 +108,15 @@ class Defaults extends Proxy
     {
         $this->throwInvalidParam('server');
     }
+
+    /**
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
+     */
+    public function countServers()
+    {
+        $this->throwInvalidParam('server');
+    }
+
     /**
      * @throws \HAProxy\Config\Exception\InvalidParameterException
      */

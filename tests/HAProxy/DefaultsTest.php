@@ -68,6 +68,15 @@ class DefaultsTest extends TestCase
         $defaults->addServer('test', '127.0.0.1');
     }
 
+    public function testCountServers()
+    {
+        $this->expectException('HAProxy\Config\Exception\InvalidParameterException');
+        $this->expectExceptionMessage('Server is not allowed on a defaults proxy block!');
+
+        $defaults = new Defaults();
+        $defaults->countServers();
+    }
+
     public function testAddParameterString()
     {
         $defaults = new Defaults();

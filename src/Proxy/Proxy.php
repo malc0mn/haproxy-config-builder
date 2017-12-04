@@ -216,6 +216,23 @@ abstract class Proxy extends Parambag
     }
 
     /**
+     * Count the number of servers of a given proxy block.
+     *
+     * @return int
+     */
+    public function countServers()
+    {
+        $count = 0;
+        $keywords = array_keys($this->parameters);
+        foreach ($keywords as $keyword) {
+            if (stripos($keyword, 'server ') === 0) {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
+    /**
      * @param string $name
      * @param string|array $options
      *
