@@ -247,6 +247,20 @@ abstract class Parambag extends Printable
     }
 
     /**
+     * Get the size of the longest keyword in the bag.
+     *
+     * @return int
+     */
+    public function getLongestKeywordSize()
+    {
+        return strlen(array_reduce(array_keys($this->parameters), function ($a, $b) {
+            $a = explode(' ', $a)[0];
+            $b = explode(' ', $b)[0];
+            return strlen($a) > strlen($b) ? $a : $b;
+        }));
+    }
+
+    /**
      * Add comment to the top of a proxy block.
      *
      * @param Comment $comment
@@ -386,6 +400,7 @@ abstract class Parambag extends Printable
         $text = '';
         $comment = '';
         $indent = $this->indent($indentLevel, $spacesPerIndent);
+        $maxKeyLength = $this->getLongestKeywordSize();
 
         if ($this->hasComment()) {
             $comment = $this->comment->prettyPrint($indentLevel-1, $spacesPerIndent);
@@ -401,6 +416,8 @@ abstract class Parambag extends Printable
             if (stripos($keyword, 'bind ') === 0) {
                 $glue = '';
             }
+            $keyword = explode(' ', $keyword);
+            $keyword = str_pad($keyword[0], $maxKeyLength) . (isset($keyword[1]) ? ' ' . implode(' ', array_slice($keyword, 1)) : '');
             $text .= $indent . trim($keyword . $glue . implode(' ', $params)) . "\n";
         }
 

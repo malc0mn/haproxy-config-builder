@@ -299,4 +299,20 @@ class FrontendTest extends TestCase
 
         $this->assertEquals(2, $frontend->getPrintPriority());
     }
+
+    public function testGetLongestKeywordSize()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addParameter('mode', 'http')
+            ->addParameter('default_backend', 'www_backend')
+            ->bind('*', 80)
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addAcl('is_host_example_com', 'hdr(Host) -i example.com')
+            ->addUseBackend('host_com', 'if is_host_com')
+            ->addParameter('option', 'forwardfor')
+        ;
+
+        // default_backend is the longest key!
+        $this->assertEquals(15, $frontend->getLongestKeywordSize());
+    }
 }

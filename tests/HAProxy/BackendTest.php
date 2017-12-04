@@ -253,4 +253,17 @@ class BackendTest extends TestCase
 
         $this->assertEquals(2, $backend->getPrintPriority());
     }
+
+    public function testGetLongestKeywordSize()
+    {
+        $backend = Backend::create('www_backend')
+            ->addParameter('option', 'forwardfor')
+            ->addServer('localhost', '127.0.0.1', 80)
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addParameter('mode', 'http')
+        ;
+
+        // server/option are the longest keys!
+        $this->assertEquals(6, $backend->getLongestKeywordSize());
+    }
 }
