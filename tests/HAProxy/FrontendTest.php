@@ -290,4 +290,13 @@ class FrontendTest extends TestCase
             ] === $frontend->getOrderedParameters()
         );
     }
+
+    public function testSetPrintPriority()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->setPrintPriority(2)
+        ;
+
+        $this->assertEquals(2, $frontend->getPrintPriority());
+    }
 }

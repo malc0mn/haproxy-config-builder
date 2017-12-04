@@ -125,4 +125,13 @@ class DefaultsTest extends TestCase
             $defaults->parameterExists('mode')
         );
     }
+
+    public function testSetPrintPriority()
+    {
+        $this->expectException('HAProxy\Config\Exception\InvalidParameterException');
+        $this->expectExceptionMessage('SetPrintPriority is not allowed on a defaults proxy block!');
+
+        $defaults = new Defaults();
+        $defaults->setPrintPriority(2);
+    }
 }

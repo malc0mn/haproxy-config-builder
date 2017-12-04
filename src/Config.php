@@ -486,6 +486,28 @@ class Config extends Printable
     }
 
     /**
+     * Get the proxies ordered by their priority.
+     *
+     * @return Proxy[]
+     */
+    public function getProxiesByPriority()
+    {
+        // We work on a copy of the data since usort() modifies the original
+        // array which is not what we want.
+        $prioritised = $this->proxies;
+
+        usort($prioritised, function(Proxy $a, Proxy $b) {
+            if ($a->getPrintPriority() == $b->getPrintPriority()) {
+                return 0;
+            }
+
+            return ($a->getPrintPriority() < $b->getPrintPriority()) ? -1 : 1;
+        });
+
+        return $prioritised;
+    }
+
+    /**
      * Add a comment at the top of the config file.
      *
      * @param Comment $comment
@@ -532,7 +554,7 @@ class Config extends Printable
             $text .= $userlist->prettyPrint($indentLevel+1, $spacesPerIndent);
         }
 
-        foreach ($this->proxies as $proxy) {
+        foreach ($this->getProxiesByPriority() as $proxy) {
             $text .= $proxy->prettyPrint($indentLevel+1, $spacesPerIndent);
         }
 

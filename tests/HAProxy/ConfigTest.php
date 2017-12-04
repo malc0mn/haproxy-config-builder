@@ -334,4 +334,49 @@ TEXT;
 
         $this->config->saveToFile('this/path/does/not/exist.conf');
     }
+
+    public function testPrintPriority()
+    {
+        $this->config
+            ->setDebug()
+            ->setDaemon()
+            ->addGlobal('maxconn', 256)
+            ->addGlobal('stats', ['socket', '/var/run/haproxy.stats', 'user', 'haproxy', 'group', 'haproxy', 'mode', '700', 'level', 'operator'])
+            ->addDefaults('mode', 'http')
+            ->addDefaults('timeout', ['connect', '5000ms'])
+            ->addDefaults('timeout', ['client', '50000ms'])
+            ->addDefaults('timeout', ['server', '50000ms'])
+            ->addBackend(
+                Backend::create('servers')
+                    ->addParameter('http-request', ['set-header', 'X-Forwarded-Port', '%[dst_port]'])
+                    ->addParameter('http-request', ['set-header', 'X-Forwarded-Proto', 'https', 'if', '{', 'ssl_fc', '}'])
+                    ->addServer('server1', '127.0.0.1', 8000, ['maxconn', 32])
+                    ->setPrintPriority(1002)
+            )
+            ->addUserlist(
+                Userlist::create('developers')
+                    ->addUser('eddy', '$6$mlskxjmqlkcnmlcjsmdl', ['editor', 'admin'])
+                    ->addGroup('editor', [])
+            )
+            ->addFrontend(
+                Frontend::create('http-in')
+                    ->bind('*', 80)
+                    ->bind('::', 80)
+                    ->addParameter('option', 'httpclose')
+                    ->addParameter('option', 'httplog')
+                    ->addAcl('login_page', ['url_beg', '/login'])
+                    ->addParameter('default_backend', 'servers')
+                    ->setPrintPriority(1001)
+            )
+            ->addListen(
+                Listen::create('ssh')
+                    ->addServer('ssh-host', '*', 22, ['maxconn', 3])
+            )
+        ;
+
+        $this->assertEquals(
+            (string)$this->config,
+            file_get_contents('tests/haproxy-priority.conf')
+        );
+    }
 }

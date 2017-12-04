@@ -96,6 +96,8 @@ var_export($configFromFile);
 
 ### Output ordering
 
+###### Keywords ordering within a proxy block
+
 By default, the builder output will be printed in the same order you have added
 parameters.
 This is not always desired, especially when working with ACLs that you want to
@@ -171,6 +173,107 @@ echo (string)$frontend;
  default_backend www_backend
  */
 ```
+
+###### Ordering of proxy blocks in the config file
+
+The proxy blocks will be rendered according to their given priority with some
+limitations:
+1. `global` will **always** be rendered **first** (1st).
+2. `defaults` will **always** be rendered **second** (2nd).
+3. `userlist` will **always** be rendered **third** (3rd).
+4. Attempting to set a print priority on `defaults` will throw an exception.
+
+You can thus only control the print priority of `backend`, `frontend` and
+`listen` proxy blocks.
+The default priority is set to *1000*. You can change the priority by calling
+the setPrintPriority() method on the desired proxy block: **a smaller integer
+means a higher priority**!
+
+```php
+require 'vendor/autoload.php';
+
+use HAProxy\Config\Comment;
+use HAProxy\Config\Proxy\Backend;
+use HAProxy\Config\Proxy\Frontend;
+use HAProxy\Config\Proxy\Listen;
+use HAProxy\Config\Userlist;
+use HAProxy\Config\Config;
+
+$comment = <<<TEXT
+Simple configuration for an HTTP proxy listening on port 80 on all
+interfaces and forwarding requests to a single backend "servers" with a
+single server "server1" listening on 127.0.0.1:8000
+TEXT;
+
+$config = Config::create()
+    ->addComment(
+        new Comment($comment)
+    )
+    ->setDebug()
+    ->setDaemon()
+    ->addGlobal('maxconn', 256)
+    ->addDefaults('mode', 'http')
+    ->addDefaults('timeout', ['connect', '5000ms'])
+    ->addDefaults('timeout', ['client', '50000ms'])
+    ->addDefaults('timeout', ['server', '50000ms'])
+    ->addUserlist(
+        Userlist::create('developers')
+            ->addUser('eddy', '$6$mlskxjmqlkcnmlcjsmdl', ['editor', 'admin'])
+            ->addGroup('editor', [])
+    )
+    ->addBackend(
+        Backend::create('servers')
+            ->addServer('server1', '127.0.0.1', 8000, ['maxconn', 32])
+            ->setPrintPriority(1002)
+    )
+    ->addListen(
+        Listen::create('ssh')
+            ->addServer('ssh-host', '*', 22, 'maxconn 3')
+    )
+    ->addFrontend(
+        Frontend::create('http-in')
+            ->bind('*', 80)
+            ->addParameter('default_backend', 'servers')
+            ->addAcl('login_page', ['url_beg', '/login'])
+            ->setPrintPriority(1001)
+    )
+;
+
+echo (string)$config;
+
+/*
+ # Simple configuration for an HTTP proxy listening on port 80 on all
+ # interfaces and forwarding requests to a single backend "servers" with a
+ # single server "server1" listening on 127.0.0.1:8000
+ global
+     maxconn 256
+     debug
+     daemon
+
+ defaults
+     mode http
+     timeout connect 5000ms
+     timeout client 50000ms
+     timeout server 50000ms
+
+ userlist developers
+     group editor
+
+     user eddy password $6$mlskxjmqlkcnmlcjsmdl groups editor,admin
+
+ listen ssh
+     server ssh-host *:22 maxconn 3
+
+ frontend http-in
+     bind *:80
+     default_backend servers
+     acl login_page url_beg /login
+
+ backend servers
+     server server1 127.0.0.1:8000 maxconn 32
+ */
+
+````
 
 ### Now what?
 

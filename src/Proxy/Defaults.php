@@ -31,6 +31,14 @@ class Defaults extends Proxy
     }
 
     /**
+     * @throws \HAProxy\Config\Exception\InvalidParameterException
+     */
+    public function setPrintPriority($priority)
+    {
+        $this->throwInvalidParam(__FUNCTION__);
+    }
+
+    /**
      * Build the class with the proper constructor.
      *
      * @param array $line

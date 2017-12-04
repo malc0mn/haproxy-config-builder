@@ -243,4 +243,13 @@ class BackendTest extends TestCase
             ] === $backend->getOrderedParameters()
         );
     }
+
+    public function testSetPrintPriority()
+    {
+        $backend = Backend::create('www_backend')
+            ->setPrintPriority(2)
+        ;
+
+        $this->assertEquals(2, $backend->getPrintPriority());
+    }
 }

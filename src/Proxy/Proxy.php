@@ -13,6 +13,12 @@ abstract class Proxy extends Parambag
     protected $name;
 
     /**
+     * @var int
+     */
+    protected $priority;
+
+
+    /**
      * Proxy constructor.
      *
      * @param string $name
@@ -20,6 +26,7 @@ abstract class Proxy extends Parambag
     public function __construct($name)
     {
         $this->name = $name;
+        $this->priority = 1000;
     }
 
     /**
@@ -28,6 +35,29 @@ abstract class Proxy extends Parambag
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set the printing priority of this block.
+     *
+     * @param int $priority
+     *
+     * @return static
+     */
+    public function setPrintPriority($priority)
+    {
+        $this->priority = $priority;
+        return $this;
+    }
+
+    /**
+     * Get the printing priority of this block;
+     *
+     * @return int
+     */
+    public function getPrintPriority()
+    {
+        return $this->priority;
     }
 
     /**
