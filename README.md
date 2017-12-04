@@ -96,7 +96,7 @@ var_export($configFromFile);
 
 ### Output ordering
 
-##### Keywords ordering within a proxy block
+#### Keywords ordering within a proxy block
 
 By default, the builder output will be printed in the same order you have added
 parameters.
@@ -174,7 +174,7 @@ echo (string)$frontend;
  */
 ```
 
-##### Ordering of proxy blocks in the config file
+#### Ordering of proxy blocks in the config file
 
 The proxy blocks will be rendered according to their given priority with some
 limitations:
