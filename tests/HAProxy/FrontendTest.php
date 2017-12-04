@@ -227,7 +227,7 @@ class FrontendTest extends TestCase
     public function testGetOrderedParameters()
     {
         $frontend = Frontend::create('www_frontend')
-            ->setParameterOrder(['bind', 'mode', 'option', 'acl', 'use_backend', 'default_backend'])
+            ->setParameterOrder(['bind', 'mode', 'option', 'reqidel', 'acl', 'use_backend', 'default_backend'])
             ->addParameter('mode', 'http')
             ->addParameter('default_backend', 'www_backend')
             ->bind('*', 80)
@@ -255,7 +255,7 @@ class FrontendTest extends TestCase
     public function testGetOrderedParametersWithGrouping()
     {
         $frontend = Frontend::create('www_frontend')
-            ->setParameterOrder(['bind', 'mode', 'option', 'acl', 'use_backend', 'default_backend'], true)
+            ->setParameterOrder(['bind', 'mode', 'option', 'reqidel', 'acl', 'use_backend', 'default_backend'], true)
             ->addParameter('mode', 'http')
             ->addParameter('default_backend', 'www_backend')
             ->bind('*', 80)

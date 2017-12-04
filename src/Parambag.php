@@ -345,10 +345,12 @@ abstract class Parambag extends Printable
             $paramsCopy = $this->parameters;
 
             $i = 0;
+            $emptyLines = 0;
             $len = count($this->order);
             // $_ as a means to indicate we won't be using this variable!
             foreach ($this->order as $key => $_) {
                 $i++;
+                $found = false;
                 foreach ($paramsCopy as $parameter => $options) {
                     // The stripos() approach is used as certain parameters can
                     // occur multiple times. For example:
@@ -359,12 +361,13 @@ abstract class Parambag extends Printable
                     if ($key === $parameter || stripos($parameter, "$key ") === 0) {
                         $sorted[$parameter] = $paramsCopy[$parameter];
                         unset($paramsCopy[$parameter]);
+                        $found = true;
                     }
                 }
                 // Add empty line after keyword 'group' when requested, except
                 // for the last one.
-                if ($i < $len && $this->orderGroup) {
-                    $sorted[self::EMPTY_LINE_KEY . $this->emptyLineCounter++] = [];
+                if ($found && $i < $len && $this->orderGroup) {
+                    $sorted[self::EMPTY_LINE_KEY . $emptyLines++] = [];
                 }
             }
 
