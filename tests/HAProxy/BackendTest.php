@@ -183,8 +183,9 @@ class BackendTest extends TestCase
 
     public function testSetParameterOrder()
     {
-        $backend = Backend::create('www_backend');
-        $backend->setParameterOrder(['mode', 'option', 'acl', 'server']);
+        $backend = Backend::create('www_backend')
+            ->setParameterOrder(['mode', 'option', 'acl', 'server'])
+        ;
 
         $this->assertEquals(
             ['mode' => null, 'option' => null, 'acl' => null, 'server' => null],
@@ -194,13 +195,13 @@ class BackendTest extends TestCase
 
     public function testGetOrderedParameters()
     {
-        $backend = Backend::create('www_backend');
-        $backend->setParameterOrder(['mode', 'reqidel', 'option', 'acl', 'server']);
-
-        $backend->addParameter('option', 'forwardfor');
-        $backend->addServer('localhost', '127.0.0.1', 80);
-        $backend->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https');
-        $backend->addParameter('mode', 'http');
+        $backend = Backend::create('www_backend')
+            ->setParameterOrder(['mode', 'reqidel', 'option', 'acl', 'server'])
+            ->addParameter('option', 'forwardfor')
+            ->addServer('localhost', '127.0.0.1', 80)
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addParameter('mode', 'http')
+        ;
 
         // assertEquals gave weird results allowing the test to pass while the
         // arrays were clearly QUITE different!
@@ -216,19 +217,19 @@ class BackendTest extends TestCase
 
     public function testGetOrderedParametersWithGrouping()
     {
-        $backend = Backend::create('www_backend');
-        $backend->setParameterOrder([
-            'mode' => false,
-            'reqidel' => false,
-            'option' => true,
-            'acl' => true,
-            'server' => false,
-        ]);
-
-        $backend->addParameter('option', 'forwardfor');
-        $backend->addServer('localhost', '127.0.0.1', 80);
-        $backend->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https');
-        $backend->addParameter('mode', 'http');
+        $backend = Backend::create('www_backend')
+            ->setParameterOrder([
+                'mode' => false,
+                'reqidel' => false,
+                'option' => true,
+                'acl' => true,
+                'server' => false,
+            ])
+            ->addParameter('option', 'forwardfor')
+            ->addServer('localhost', '127.0.0.1', 80)
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addParameter('mode', 'http')
+        ;
 
         // assertEquals gave weird results allowing the test to pass while the
         // arrays were clearly QUITE different!
