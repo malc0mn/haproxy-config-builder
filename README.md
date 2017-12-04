@@ -47,7 +47,7 @@ interfaces and forwarding requests to a single backend "servers" with a
 single server "server1" listening on 127.0.0.1:8000
 TEXT;
 
-$config = (string) Config::create()
+$config = Config::create()
     ->addComment(
         new Comment($comment)
     )
@@ -79,7 +79,7 @@ $config = (string) Config::create()
     )
 ;
 
-var_export($config);
+echo (string)$config;
 ```
 
 ###### Read from file
@@ -104,7 +104,7 @@ This is not always desired, especially when working with ACLs that you want to
 be present in the output before you set the `use_backend` calls.
 
 To solve this issue, you can use the `setParameterOrder()` method to indicate
-the desired printing order. An exemple:
+the desired printing order. An example:
 
 ```php
 <?php
@@ -125,13 +125,13 @@ $frontend = Frontend::create('www_frontend')
 echo (string)$frontend;
 /*
  frontend www_frontend
- mode http
+ mode            http
  default_backend www_backend
- bind *:80
- acl is_https hdr(X-Forwarded-Proto) -i https
- acl is_host_com hdr(Host) -i example.com
- use_backend host_com if is_host_com
- option forwardfor
+ bind            *:80
+ acl             is_https hdr(X-Forwarded-Proto) -i https
+ acl             is_host_com hdr(Host) -i example.com
+ use_backend     host_com if is_host_com
+ option          forwardfor
  */
 
 $frontend->setParameterOrder(['bind', 'mode', 'option', 'acl', 'use_backend', 'default_backend']);
@@ -139,12 +139,12 @@ $frontend->setParameterOrder(['bind', 'mode', 'option', 'acl', 'use_backend', 'd
 echo (string)$frontend;
 /*
  frontend www_frontend
- bind *:80
- mode http
- option forwardfor
- acl is_https hdr(X-Forwarded-Proto) -i https
- acl is_host_com hdr(Host) -i example.com
- use_backend host_com if is_host_com
+ bind            *:80
+ mode            http
+ option          forwardfor
+ acl             is_https hdr(X-Forwarded-Proto) -i https
+ acl             is_host_com hdr(Host) -i example.com
+ use_backend     host_com if is_host_com
  default_backend www_backend
  */
 
@@ -161,14 +161,14 @@ $frontend->setParameterOrder([
 echo (string)$frontend;
 /*
  frontend www_frontend
- bind *:80
- mode http
- option forwardfor
+ bind            *:80
+ mode            http
+ option          forwardfor
 
- acl is_https hdr(X-Forwarded-Proto) -i https
- acl is_host_com hdr(Host) -i example.com
+ acl             is_https hdr(X-Forwarded-Proto) -i https
+ acl             is_host_com hdr(Host) -i example.com
 
- use_backend host_com if is_host_com
+ use_backend     host_com if is_host_com
 
  default_backend www_backend
  */
@@ -250,7 +250,7 @@ echo (string)$config;
      daemon
 
  defaults
-     mode http
+     mode    http
      timeout connect 5000ms
      timeout client 50000ms
      timeout server 50000ms
@@ -264,9 +264,9 @@ echo (string)$config;
      server ssh-host *:22 maxconn 3
 
  frontend http-in
-     bind *:80
+     bind            *:80
      default_backend servers
-     acl login_page url_beg /login
+     acl             login_page url_beg /login
 
  backend servers
      server server1 127.0.0.1:8000 maxconn 32
