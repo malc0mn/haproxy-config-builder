@@ -96,7 +96,7 @@ var_export($configFromFile);
 
 ### Output ordering
 
-###### Keywords ordering within a proxy block
+##### Keywords ordering within a proxy block
 
 By default, the builder output will be printed in the same order you have added
 parameters.
@@ -174,7 +174,7 @@ echo (string)$frontend;
  */
 ```
 
-###### Ordering of proxy blocks in the config file
+##### Ordering of proxy blocks in the config file
 
 The proxy blocks will be rendered according to their given priority with some
 limitations:
@@ -240,7 +240,6 @@ $config = Config::create()
 ;
 
 echo (string)$config;
-
 /*
  # Simple configuration for an HTTP proxy listening on port 80 on all
  # interfaces and forwarding requests to a single backend "servers" with a
@@ -272,7 +271,6 @@ echo (string)$config;
  backend servers
      server server1 127.0.0.1:8000 maxconn 32
  */
-
 ````
 
 ### Now what?
