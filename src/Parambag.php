@@ -416,8 +416,11 @@ abstract class Parambag extends Printable
             if (stripos($keyword, 'bind ') === 0) {
                 $glue = '';
             }
-            $keyword = explode(' ', $keyword);
-            $keyword = str_pad($keyword[0], $maxKeyLength) . (isset($keyword[1]) ? ' ' . implode(' ', array_slice($keyword, 1)) : '');
+            // TODO: properly handle comments!!!
+            if (stripos($keyword, '#') !== 0) {
+                $keyword = explode(' ', $keyword);
+                $keyword = str_pad($keyword[0], $maxKeyLength) . (isset($keyword[1]) ? ' ' . implode(' ', array_slice($keyword, 1)) : '');
+            }
             $text .= $indent . trim($keyword . $glue . implode(' ', $params)) . "\n";
         }
 
