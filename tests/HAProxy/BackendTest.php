@@ -117,7 +117,7 @@ class BackendTest extends TestCase
         );
 
         $this->assertEquals(
-            ['hdr(Host) -i example.com'],
+            ['hdr(Host)', '-i', 'example.com'],
             $backend->getAclDetails('is_host_com')
         );
     }
@@ -222,7 +222,7 @@ class BackendTest extends TestCase
             [
                 'mode' => ['http'],
                 'option forwardfor' => [],
-                'acl is_https' => ['hdr(X-Forwarded-Proto) -i https'],
+                'acl is_https' => ['hdr(X-Forwarded-Proto)', '-i', 'https'],
                 'server localhost' => ['127.0.0.1:80'],
             ] === $backend->getOrderedParameters()
         );
@@ -251,7 +251,7 @@ class BackendTest extends TestCase
                 'mode' => ['http'],
                 'option forwardfor' => [],
                 '$emptyLine$0' => [],
-                'acl is_https' => ['hdr(X-Forwarded-Proto) -i https'],
+                'acl is_https' => ['hdr(X-Forwarded-Proto)', '-i', 'https'],
                 '$emptyLine$1' => [],
                 'server localhost' => ['127.0.0.1:80'],
             ] === $backend->getOrderedParameters()

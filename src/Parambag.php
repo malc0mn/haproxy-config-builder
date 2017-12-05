@@ -168,7 +168,7 @@ abstract class Parambag extends Printable
     protected function toArray($params)
     {
         if (!is_array($params)) {
-            $params = [$params];
+            $params = explode(' ', $params);
         }
 
         return $params;

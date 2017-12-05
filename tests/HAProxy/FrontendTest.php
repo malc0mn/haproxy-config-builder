@@ -99,7 +99,7 @@ class FrontendTest extends TestCase
         );
 
         $this->assertEquals(
-            ['hdr(Host) -i example.com'],
+            ['hdr(Host)', '-i', 'example.com'],
             $frontend->getAclDetails('is_host_com')
         );
     }
@@ -194,12 +194,12 @@ class FrontendTest extends TestCase
         );
 
         $this->assertEquals(
-            ['if is_host_com'],
+            ['if', 'is_host_com'],
             $frontend->getUseBackendDetails('www_backend')
         );
 
         $this->assertEquals(
-            ['if is_https'],
+            ['if', 'is_https'],
             $frontend->getUseBackendDetails('https_backend')
         );
     }
@@ -254,9 +254,9 @@ class FrontendTest extends TestCase
                 'bind *' => [':80'],
                 'mode' => ['http'],
                 'option forwardfor' => [],
-                'acl is_https' => ['hdr(X-Forwarded-Proto) -i https'],
-                'acl is_host_com' => ['hdr(Host) -i example.com'],
-                'use_backend host_com' => ['if is_host_com'],
+                'acl is_https' => ['hdr(X-Forwarded-Proto)', '-i', 'https'],
+                'acl is_host_com' => ['hdr(Host)', '-i', 'example.com'],
+                'use_backend host_com' => ['if', 'is_host_com'],
                 'default_backend' => ['www_backend'],
             ] === $frontend->getOrderedParameters()
         );
@@ -291,10 +291,10 @@ class FrontendTest extends TestCase
                 'mode' => ['http'],
                 'option forwardfor' => [],
                 '$emptyLine$0' => [],
-                'acl is_https' => ['hdr(X-Forwarded-Proto) -i https'],
-                'acl is_host_com' => ['hdr(Host) -i example.com'],
+                'acl is_https' => ['hdr(X-Forwarded-Proto)', '-i', 'https'],
+                'acl is_host_com' => ['hdr(Host)', '-i', 'example.com'],
                 '$emptyLine$1' => [],
-                'use_backend host_com' => ['if is_host_com'],
+                'use_backend host_com' => ['if', 'is_host_com'],
                 '$emptyLine$2' => [],
                 'default_backend' => ['www_backend'],
             ] === $frontend->getOrderedParameters()

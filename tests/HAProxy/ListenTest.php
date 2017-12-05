@@ -120,7 +120,7 @@ class ListenTest extends TestCase
         );
 
         $this->assertEquals(
-            ['hdr(Host) -i example.com'],
+            ['hdr(Host)', '-i', 'example.com'],
             $listen->getAclDetails('is_host_com')
         );
     }
