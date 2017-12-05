@@ -37,6 +37,7 @@ abstract class Parambag extends Printable
     protected $allowDuplicate = [
         'http-request' => 3,
         'option' => 1,
+        'redirect' => 5,
         'reqrep' => 1,
         'stats' => 1,
         'timeout' => 1,
