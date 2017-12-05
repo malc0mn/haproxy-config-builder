@@ -162,11 +162,16 @@ abstract class Parambag extends Printable
      * Helper to make sure we have an array.
      *
      * @param string|array $params
+     * @param string $keyword
      *
      * @return array
      */
-    protected function toArray($params)
+    protected function toArray($params, $keyword = null)
     {
+        if ($keyword && stripos($keyword, 'req') === 0) {
+            return [$params];
+        }
+
         if (!is_array($params)) {
             $params = explode(' ', $params);
         }
@@ -184,7 +189,7 @@ abstract class Parambag extends Printable
      */
     public function addParameter($keyword, $params = [])
     {
-        $params = $this->toArray($params);
+        $params = $this->toArray($params, $keyword);
         // Handle keywords that can occur multiple times.
         if (in_array($keyword, array_keys($this->allowDuplicate))) {
             $oldKey = $keyword;
