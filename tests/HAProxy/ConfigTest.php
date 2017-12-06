@@ -242,6 +242,10 @@ TEXT;
                     ->addUser('eddy', '$6$mlskxjmqlkcnmlcjsmdl', ['editor', 'admin'])
                     ->addGroup('editor', [])
             )
+            ->addUserlist(
+                Userlist::create('masters')
+                    ->addUser('jules', '$6$mlskxjmqlkcnmlcjsmdl')
+            )
             ->addFrontend(
                 Frontend::create('http-in')
                     ->bind('*', 80)
@@ -291,6 +295,10 @@ TEXT;
                 Userlist::create('developers')
                     ->addUser('eddy', '$6$mlskxjmqlkcnmlcjsmdl', ['editor', 'admin'])
                     ->addGroup('editor', [])
+            )
+            ->addUserlist(
+                Userlist::create('masters')
+                    ->addUser('jules', '$6$mlskxjmqlkcnmlcjsmdl')
             )
             ->addFrontend(
                 Frontend::create('http-in')

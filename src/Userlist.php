@@ -308,12 +308,14 @@ class Userlist extends Parambag
         $text = '';
         $indent = $this->indent($indentLevel, $spacesPerIndent);
 
-        foreach ($this->parameters['groups'] as $name => $users) {
-            $text .= $indent . 'group ' . $name;
-            if ($users) {
-                $text .= ' users ' . implode(',', $users);
+        if (isset($this->parameters['groups'])) {
+            foreach ($this->parameters['groups'] as $name => $users) {
+                $text .= $indent . 'group ' . $name;
+                if ($users) {
+                    $text .= ' users ' . implode(',', $users);
+                }
+                $text .= "\n";
             }
-            $text .= "\n";
         }
         // Add empty line for readability.
         if (!empty($text)) {
