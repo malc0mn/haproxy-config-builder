@@ -168,11 +168,11 @@ abstract class Parambag extends Printable
      */
     protected function toArray($params, $keyword = null)
     {
-        if ($keyword && stripos($keyword, 'req') === 0) {
-            return [$params];
-        }
-
         if (!is_array($params)) {
+            if ($keyword && stripos($keyword, 'req') === 0) {
+                return [$params];
+            }
+
             $params = explode(' ', $params);
         }
 
