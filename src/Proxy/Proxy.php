@@ -83,6 +83,7 @@ abstract class Proxy extends Parambag
                     break;
                 case 'bind':
                     $host = explode(':', $line[1]);
+                    $opts = array_slice($line, 2);
                     if (count($host) < 2) {
                         throw new TextException(sprintf(
                             'Invalid bind parameters for %s "%s"',
@@ -91,11 +92,11 @@ abstract class Proxy extends Parambag
                     }
                     if (count($host) === 2) {
                         // IPv4.
-                        $class->bind($host[0], $host[1]);
+                        $class->bind($host[0], $host[1], $opts);
                     } else {
                         // IPv6.
                         $port = array_pop($host);
-                        $class->bind(implode($host, ':'), $port);
+                        $class->bind(implode($host, ':'), $port, $opts);
                     }
                     break;
                 case 'server':
@@ -118,12 +119,17 @@ abstract class Proxy extends Parambag
     /**
      * @param string $fqdnOrIp
      * @param int $port
+     * @param array $options
      *
      * @return static
      */
-    public function bind($fqdnOrIp, $port)
+    public function bind($fqdnOrIp, $port, $options = [])
     {
-        $this->addParameter("bind $fqdnOrIp", ":$port");
+        $params = array_merge(
+            [":$port"],
+            $this->toArray($options)
+        );
+        $this->addParameter("bind $fqdnOrIp", $params);
 
         return $this;
     }

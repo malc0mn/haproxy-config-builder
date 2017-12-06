@@ -26,7 +26,7 @@ class Backend extends Proxy
     /**
      * @throws \HAProxy\Config\Exception\InvalidParameterException
      */
-    public function bind($fqdnOrIp, $port)
+    public function bind($fqdnOrIp, $port, $options = [])
     {
         $this->throwInvalidParam(__FUNCTION__);
     }
