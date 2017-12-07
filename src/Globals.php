@@ -15,21 +15,6 @@ use HAProxy\Config\Exception\TextException;
 class Globals extends Parambag
 {
     /**
-     * @var bool
-     */
-    private $debug;
-
-    /**
-     * @var bool
-     */
-    private $quiet;
-
-    /**
-     * @var bool
-     */
-    private $daemon;
-
-    /**
      * {@inheritdoc}
      */
     protected function getType()
@@ -75,7 +60,11 @@ class Globals extends Parambag
      */
     public function debug($bool = true)
     {
-        $this->debug = $bool;
+        if ($bool) {
+            $this->addParameter('debug');
+        } else {
+            $this->removeParameter('debug');
+        }
     }
 
     /**
@@ -85,7 +74,7 @@ class Globals extends Parambag
      */
     public function isDebug()
     {
-        return (bool)$this->debug;
+        return $this->parameterExists('debug');
     }
 
     /**
@@ -95,7 +84,11 @@ class Globals extends Parambag
      */
     public function quiet($bool = true)
     {
-        $this->quiet = $bool;
+        if ($bool) {
+            $this->addParameter('quiet');
+        } else {
+            $this->removeParameter('quiet');
+        }
     }
 
     /**
@@ -105,7 +98,7 @@ class Globals extends Parambag
      */
     public function isQuiet()
     {
-        return (bool)$this->quiet;
+        return $this->parameterExists('quiet');
     }
 
     /**
@@ -115,7 +108,11 @@ class Globals extends Parambag
      */
     public function daemon($bool = true)
     {
-        $this->daemon = $bool;
+        if ($bool) {
+            $this->addParameter('daemon');
+        } else {
+            $this->removeParameter('daemon');
+        }
     }
 
     /**
@@ -125,36 +122,6 @@ class Globals extends Parambag
      */
     public function isDaemon()
     {
-        return (bool)$this->daemon;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function prettyPrint($indentLevel, $spacesPerIndent = 4)
-    {
-        $text = parent::prettyPrint($indentLevel, $spacesPerIndent);
-
-        if ($text) {
-            // Remove blank line.
-            $text = trim($text) . "\n";
-
-            $indent = $this->indent($indentLevel, $spacesPerIndent);
-
-            if ($this->quiet) {
-                $text .= $indent . "quiet\n";
-            }
-
-            if ($this->debug) {
-                $text .= $indent . "debug\n";
-            }
-
-            if ($this->daemon) {
-                $text .= $indent . "daemon\n";
-            }
-            $text .= "\n";
-        }
-
-        return $text;
+        return $this->parameterExists('daemon');
     }
 }

@@ -231,6 +231,7 @@ TEXT;
             )
             ->setDebug()
             ->setDaemon()
+            ->setQUiet()
             ->addGlobal('maxconn', 256)
             ->addGlobal('stats', ['socket', '/var/run/haproxy.stats', 'user', 'haproxy', 'group', 'haproxy', 'mode', '700', 'level', 'operator'])
             ->addDefaults('mode', 'http')
@@ -291,6 +292,7 @@ TEXT;
             )
             ->setDebug()
             ->setDaemon()
+            ->setQuiet()
             ->addGlobal('maxconn', 256)
             ->addGlobal('stats', ['socket', '/var/run/haproxy.stats', 'user', 'haproxy', 'group', 'haproxy', 'mode', '700', 'level', 'operator'])
             ->addDefaults('mode', 'http')
@@ -362,6 +364,7 @@ TEXT;
         $this->config
             ->setDebug()
             ->setDaemon()
+            ->setQuiet()
             ->addGlobal('maxconn', 256)
             ->addGlobal('stats', ['socket', '/var/run/haproxy.stats', 'user', 'haproxy', 'group', 'haproxy', 'mode', '700', 'level', 'operator'])
             ->addDefaults('mode', 'http')
