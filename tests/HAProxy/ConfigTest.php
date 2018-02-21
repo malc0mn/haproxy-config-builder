@@ -273,6 +273,17 @@ TEXT;
                 Listen::create('ssh')
                     ->addServer('ssh-host', '*', 22, 'maxconn 3')
             )
+            ->addListen(
+                Listen::create('redis')
+                    ->bind('127.0.0.1', 6379)
+                    ->addParameter('mode', 'tcp')
+                    ->addParameter('option', 'tcp-check')
+                    ->addParameter('tcp-check', 'send PING\r\n')
+                    ->addParameter('tcp-check', 'expect rstring (\+PONG|\-NOAUTH)')
+                    ->addParameter('tcp-check', 'send QUIT\r\n')
+                    ->addParameter('tcp-check', 'expect string +OK')
+                    ->addServer('remote-redis', '192.168.0.15', 6379, 'check fall 2 inter 1000ms')
+            )
         ;
 
         $this->assertEquals(@file_get_contents('tests/haproxy.conf'), $config);
@@ -333,6 +344,17 @@ TEXT;
             ->addListen(
                 Listen::create('ssh')
                     ->addServer('ssh-host', '*', 22, ['maxconn', 3])
+            )
+            ->addListen(
+                Listen::create('redis')
+                    ->bind('127.0.0.1', 6379)
+                    ->addParameter('mode', 'tcp')
+                    ->addParameter('option', 'tcp-check')
+                    ->addParameter('tcp-check', 'send PING\r\n')
+                    ->addParameter('tcp-check', 'expect rstring (\+PONG|\-NOAUTH)')
+                    ->addParameter('tcp-check', 'send QUIT\r\n')
+                    ->addParameter('tcp-check', 'expect string +OK')
+                    ->addServer('remote-redis', '192.168.0.15', 6379, 'check fall 2 inter 1000ms')
             )
         ;
 

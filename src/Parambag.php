@@ -40,6 +40,7 @@ abstract class Parambag extends Printable
         'redirect' => 5,
         'reqrep' => 1,
         'stats' => 1,
+        'tcp-check' => 2,
         'timeout' => 1,
     ];
 
