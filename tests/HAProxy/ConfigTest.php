@@ -265,6 +265,8 @@ TEXT;
             )
             ->addBackend(
                 Backend::create('servers')
+                    ->addParameter('errorfile', ['503', '/etc/haproxy/custom-errors/503.http'])
+                    ->addParameter('errorfile', ['403', '/etc/haproxy/custom-errors/403.http'])
                     ->addParameter('http-request', ['set-header', 'X-Forwarded-Port', '%[dst_port]'])
                     ->addParameter('http-request', ['set-header', 'X-Forwarded-Proto', 'https', 'if { ssl_fc }'])
                     ->addServer('server1', '127.0.0.1', 8000, ['maxconn', 32])
@@ -337,6 +339,8 @@ TEXT;
             )
             ->addBackend(
                 Backend::create('servers')
+                    ->addParameter('errorfile', ['503', '/etc/haproxy/custom-errors/503.http'])
+                    ->addParameter('errorfile', ['403', '/etc/haproxy/custom-errors/403.http'])
                     ->addParameter('http-request', ['set-header', 'X-Forwarded-Port', '%[dst_port]'])
                     ->addParameter('http-request', ['set-header', 'X-Forwarded-Proto', 'https', 'if', '{', 'ssl_fc', '}'])
                     ->addServer('server1', '127.0.0.1', 8000, ['maxconn', 32])
