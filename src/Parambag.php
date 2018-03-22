@@ -415,21 +415,7 @@ abstract class Parambag extends Printable
         }
 
         foreach ($this->getOrderedParameters() as $keyword => $params) {
-            if (stripos($keyword, self::EMPTY_LINE_KEY) === 0) {
-                $text .= "\n";
-                continue;
-            }
-
-            $glue = ' ';
-            if (stripos($keyword, 'bind ') === 0) {
-                $glue = '';
-            }
-            // TODO: properly handle comments!!!
-            if (stripos($keyword, '#') !== 0) {
-                $keyword = explode(' ', $keyword);
-                $keyword = str_pad($keyword[0], $maxKeyLength) . (isset($keyword[1]) ? ' ' . implode(' ', array_slice($keyword, 1)) : '');
-            }
-            $text .= $indent . trim($keyword . $glue . implode(' ', $params)) . "\n";
+            $text .= $this->printLine($keyword, $params, $maxKeyLength, $indent);
         }
 
         if (!empty($text)) {
@@ -438,5 +424,33 @@ abstract class Parambag extends Printable
         }
 
         return $text;
+    }
+
+    /**
+     * Helper to print a single keyword/params line.
+     *
+     * @param string $keyword
+     * @param array $params
+     * @param int $maxKeyLength
+     * @param int $indent
+     *
+     * @return string
+     */
+    protected function printLine($keyword, $params, $maxKeyLength, $indent)
+    {
+        if (stripos($keyword, self::EMPTY_LINE_KEY) === 0) {
+            return "\n";
+        }
+
+        $glue = ' ';
+        if (stripos($keyword, 'bind ') === 0) {
+            $glue = '';
+        }
+        // TODO: properly handle comments!!!
+        if (stripos($keyword, '#') !== 0) {
+            $keyword = explode(' ', $keyword);
+            $keyword = str_pad($keyword[0], $maxKeyLength) . (isset($keyword[1]) ? ' ' . implode(' ', array_slice($keyword, 1)) : '');
+        }
+        return $indent . trim($keyword . $glue . implode(' ', $params)) . "\n";
     }
 }
