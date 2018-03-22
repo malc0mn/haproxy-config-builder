@@ -181,8 +181,26 @@ class FrontendTest extends TestCase
         $frontend = Frontend::create('www_frontend')
             ->addAcl('is_host_com', 'hdr(Host) -i example.com')
             ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
-            ->addUseBackend('https_backend', 'if is_https')
-            ->addUseBackend('www_backend', 'if is_host_com')
+            ->addUseBackend('https_backend')
+            ->addUseBackend('www_backend')
+        ;
+
+        $this->assertTrue(
+            $frontend->useBackendExists('www_backend')
+        );
+
+        $this->assertTrue(
+            $frontend->useBackendExists('https_backend')
+        );
+    }
+
+    public function testAddUseBackendWithConditions()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addUseBackendWithConditions('https_backend', ['is_https'])
+            ->addUseBackendWithConditions('www_backend', ['is_host_com'])
         ;
 
         $this->assertTrue(
@@ -194,12 +212,12 @@ class FrontendTest extends TestCase
         );
 
         $this->assertEquals(
-            ['if', 'is_host_com'],
+            ['conditions' => [['is_host_com']], 'test' => 'if'],
             $frontend->getUseBackendDetails('www_backend')
         );
 
         $this->assertEquals(
-            ['if', 'is_https'],
+            ['conditions' => [['is_https']], 'test' => 'if'],
             $frontend->getUseBackendDetails('https_backend')
         );
     }
@@ -208,7 +226,7 @@ class FrontendTest extends TestCase
     {
         $frontend = Frontend::create('www_frontend')
             ->addAcl('is_host_com', 'hdr(Host) -i example.com')
-            ->addUseBackend('www_backend', 'if is_host_com')
+            ->addUseBackend('www_backend')
         ;
 
         $this->assertTrue(
@@ -243,7 +261,7 @@ class FrontendTest extends TestCase
             ->bind('*', 80)
             ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
             ->addAcl('is_host_com', 'hdr(Host) -i example.com')
-            ->addUseBackend('host_com', 'if is_host_com')
+            ->addUseBackend('host_com')
             ->addParameter('option', 'forwardfor')
         ;
 
@@ -256,7 +274,7 @@ class FrontendTest extends TestCase
                 'option forwardfor' => [],
                 'acl is_https' => ['hdr(X-Forwarded-Proto)', '-i', 'https'],
                 'acl is_host_com' => ['hdr(Host)', '-i', 'example.com'],
-                'use_backend host_com' => ['if', 'is_host_com'],
+                'use_backend host_com' => [],
                 'default_backend' => ['www_backend'],
             ] === $frontend->getOrderedParameters()
         );
@@ -279,7 +297,7 @@ class FrontendTest extends TestCase
             ->bind('*', 80)
             ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
             ->addAcl('is_host_com', 'hdr(Host) -i example.com')
-            ->addUseBackend('host_com', 'if is_host_com')
+            ->addUseBackend('host_com')
             ->addParameter('option', 'forwardfor')
         ;
 
@@ -294,7 +312,7 @@ class FrontendTest extends TestCase
                 'acl is_https' => ['hdr(X-Forwarded-Proto)', '-i', 'https'],
                 'acl is_host_com' => ['hdr(Host)', '-i', 'example.com'],
                 '$emptyLine$1' => [],
-                'use_backend host_com' => ['if', 'is_host_com'],
+                'use_backend host_com' => [],
                 '$emptyLine$2' => [],
                 'default_backend' => ['www_backend'],
             ] === $frontend->getOrderedParameters()

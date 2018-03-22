@@ -262,6 +262,8 @@ TEXT;
                     ->bind('', 443, 'ssl crt /etc/ssl/cert1.pem crt /etc/ssl/cert2.pem crt /etc/ssl/cert3.pem crt /etc/ssl/cert4.pem crt /etc/ssl/cert5.pem crt /etc/ssl/cert6.pem crt /etc/ssl/cert7.pem crt /etc/ssl/cert8.pem crt /etc/ssl/cert9.pem crt /etc/ssl/tep.pem no-sslv3')
                     ->bind('::', 443, 'ssl crt /etc/ssl/cert1.pem crt /etc/ssl/cert2.pem crt /etc/ssl/cert3.pem crt /etc/ssl/cert4.pem crt /etc/ssl/cert5.pem crt /etc/ssl/cert6.pem crt /etc/ssl/cert7.pem crt /etc/ssl/cert8.pem crt /etc/ssl/cert9.pem crt /etc/ssl/tep.pem no-sslv3')
                     ->addParameter('mode', 'http')
+                    ->addAcl('is_host_example', ['hdr(host)', '-i', 'example.com'])
+                    ->addUseBackendWithConditions('servers', ['is_host_example'])
             )
             ->addBackend(
                 Backend::create('servers')
@@ -336,6 +338,8 @@ TEXT;
                     ->bind('', 443, 'ssl crt /etc/ssl/cert1.pem crt /etc/ssl/cert2.pem crt /etc/ssl/cert3.pem crt /etc/ssl/cert4.pem crt /etc/ssl/cert5.pem crt /etc/ssl/cert6.pem crt /etc/ssl/cert7.pem crt /etc/ssl/cert8.pem crt /etc/ssl/cert9.pem crt /etc/ssl/tep.pem no-sslv3')
                     ->bind('::', 443, 'ssl crt /etc/ssl/cert1.pem crt /etc/ssl/cert2.pem crt /etc/ssl/cert3.pem crt /etc/ssl/cert4.pem crt /etc/ssl/cert5.pem crt /etc/ssl/cert6.pem crt /etc/ssl/cert7.pem crt /etc/ssl/cert8.pem crt /etc/ssl/cert9.pem crt /etc/ssl/tep.pem no-sslv3')
                     ->addParameter('mode', 'http')
+                    ->addAcl('is_host_example', ['hdr(host)', '-i', 'example.com'])
+                    ->addUseBackendWithConditions('servers', ['is_host_example'])
             )
             ->addBackend(
                 Backend::create('servers')
