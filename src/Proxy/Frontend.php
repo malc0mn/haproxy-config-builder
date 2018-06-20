@@ -258,7 +258,8 @@ class Frontend extends Proxy
                         if ($argSize + $orSize > 60) {
                             $text .= $this->printLine($keyword, [implode(' || ', $print)], $maxKeyLength, $indent);
                             $orSize = -1;
-                            $argSize = 0;
+                            // Do not reset to 0 here!
+                            $argSize = count($condition);
                             $print = [];
                         }
                         $print[] = implode(' ', $condition);
