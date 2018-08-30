@@ -194,6 +194,57 @@ class FrontendTest extends TestCase
         );
     }
 
+    public function testAddUseBackendWithTag()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addUseBackend('backend', 'www')
+            ->addUseBackend('backend', 'https')
+        ;
+
+        $this->assertTrue(
+            $frontend->useBackendExists('backend', 'www')
+        );
+
+        $this->assertTrue(
+            $frontend->useBackendExists('backend', 'https')
+        );
+    }
+
+    public function testAddUseBackendWithTagPrinted()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addUseBackend('backend', 'www')
+            ->addUseBackend('backend', 'https')
+        ;
+
+        $this->assertTrue(
+            $frontend->useBackendExists('backend', 'www')
+        );
+
+        $this->assertTrue(
+            $frontend->useBackendExists('backend', 'https')
+        );
+
+        $print = <<<TEXT
+frontend www_frontend
+acl         is_host_com hdr(Host) -i example.com
+acl         is_https hdr(X-Forwarded-Proto) -i https
+use_backend backend
+use_backend backend
+
+
+TEXT;
+
+        $this->assertEquals(
+            $print,
+            (string)$frontend
+        );
+    }
+
     public function testAddUseBackendWithConditions()
     {
         $frontend = Frontend::create('www_frontend')
@@ -219,6 +270,49 @@ class FrontendTest extends TestCase
         $this->assertEquals(
             ['conditions' => [['is_https']], 'test' => 'if'],
             $frontend->getUseBackendDetails('https_backend')
+        );
+    }
+
+    public function testAddUseBackendWithConditionsPrinted()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addUseBackendWithConditions('backend', ['is_https'], 'if', 'https')
+            ->addUseBackendWithConditions('backend', ['is_host_com'], 'if', 'www')
+        ;
+
+        $this->assertTrue(
+            $frontend->useBackendExists('backend', 'www')
+        );
+
+        $this->assertTrue(
+            $frontend->useBackendExists('backend', 'https')
+        );
+
+        $this->assertEquals(
+            ['conditions' => [['is_host_com']], 'test' => 'if'],
+            $frontend->getUseBackendDetails('backend', 'www')
+        );
+
+        $this->assertEquals(
+            ['conditions' => [['is_https']], 'test' => 'if'],
+            $frontend->getUseBackendDetails('backend', 'https')
+        );
+
+        $print = <<<TEXT
+frontend www_frontend
+acl         is_host_com hdr(Host) -i example.com
+acl         is_https hdr(X-Forwarded-Proto) -i https
+use_backend backend if is_https
+use_backend backend if is_host_com
+
+
+TEXT;
+
+        $this->assertEquals(
+            $print,
+            (string)$frontend
         );
     }
 

@@ -298,6 +298,115 @@ if ($config->listenExists('ssh')) {
 Have a look at the classes to see what is at your disposal. A peek at the tests
 will give you a very good idea of what you can do with all available methods.
 
+### More complex stuff
+
+If you need more complex rules that need multiple `use_backend` calls to the
+**same** backend, then you can use *tagged backends*.
+
+Consider this HAProxy frontend proxy block:
+
+```
+frontend www_frontend
+    bind *:8080
+    mode http
+
+    http-request set-header X-Original-Path %[path]
+
+    acl is_host_website hdr(host) -i website.example.com
+    acl is_host_api hdr(host) -i api.example.com
+
+    acl is_path_admin hdr_beg(X-Original-Path) -i /admin
+    acl is_path_api hdr_beg(X-Original-Path) -i /api
+
+    # Path mappings MUST come first AND in separate use_backend statements.
+    use_backend website if is_host_website is_path_admin
+    use_backend api if is_host_webste is_path_api
+
+    # Regular host mappings.
+    use_backend website if is_host_website
+    use_backend api if is_host_api
+```
+
+This example uses path mappings to direct traffic to a different backend. It
+should be obvious that you **cannot** write this to achieve the same: 
+
+```
+frontend www_frontend
+    bind *:8080
+    mode http
+
+    http-request set-header X-Original-Path %[path]
+
+    acl is_host_website hdr(host) -i website.example.com
+    acl is_host_api hdr(host) -i api.example.com
+
+    acl is_path_admin hdr_beg(X-Original-Path) -i /admin
+    acl is_path_api hdr_beg(X-Original-Path) -i /api
+
+    use_backend website if is_host_website is_path_admin || is_host_website
+    use_backend api if is_host_webste is_path_api || is_host_api
+```
+
+The above example will **never** redirect you to the API backend when calling
+the `website.example.com/api` url because the *first* `use_backend` statement
+will:
+1. see that the host **is** `website.example.com` **and** the path **is not**
+`/admin` so it will go on to the next condition
+2. see that the host **is** `website.example.com` and redirect you to the
+`website` backend.
+
+To recreate the first, correct, example using this library, you can use *tagged
+backends*:
+
+```php
+$frontend = Frontend::create('www_frontend')
+    ->bind('*', 8080)
+    ->addParameter('mode', 'http')
+
+    ->addParameter('http-request', 'set-header X-Original-Path %[path]')
+
+    ->addAcl('is_host_website', 'hdr(host) -i website.example.com')
+    ->addAcl('is_host_api', 'hdr(host) -i api.example.com')
+
+    ->addAcl('is_path_admin', 'hdr_beg(X-Original-Path) -i /admin')
+    ->addAcl('is_path_api', 'hdr_beg(X-Original-Path) -i /api')
+
+    // Here come the 'tagged' backends.
+    ->addUseBackendWithConditions(
+        'website',
+        ['is_host_website', 'is_path_admin'],
+        'if', // This is the condition, 'if' is the default.
+        'path_acl' // This is the tag.
+    )
+    ->addUseBackendWithConditions(
+        'api',
+        ['is_host_website', 'is_path_api'],
+        'if', // This is the condition, 'if' is the default.
+        'path_acl' // This is the tag.
+    )
+
+    // The 'regular' backends.
+    ->addUseBackendWithConditions('website', ['is_host_website'])
+    ->addUseBackendWithConditions('api', ['is_host_api'])
+;
+
+echo (string)$frontend;
+/*
+frontend www_frontend
+bind         *:8080
+mode         http
+http-request set-header X-Original-Path %[path]
+acl          is_host_website hdr(host) -i website.example.com
+acl          is_host_api hdr(host) -i api.example.com
+acl          is_path_admin hdr_beg(X-Original-Path) -i /admin
+acl          is_path_api hdr_beg(X-Original-Path) -i /api
+use_backend  website if is_host_website is_path_admin
+use_backend  api if is_host_website is_path_api
+use_backend  website if is_host_website
+use_backend  api if is_host_api
+*/
+```
+
 ## Credits
 
 The concepts used are based on the [Nginx Configuration processor](https://github.com/romanpitak/Nginx-Config-Processor) by

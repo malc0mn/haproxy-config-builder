@@ -6,6 +6,8 @@ use HAProxy\Config\Exception\InvalidParameterException;
 
 class Frontend extends Proxy
 {
+    const TAG_DELIMITER = '|';
+
     /**
      * @var array
      */
@@ -66,15 +68,43 @@ class Frontend extends Proxy
     }
 
     /**
-     * Add 'use_backend' parameter.
+     * For internal use only.
+     *
+     * @param string|null $tag
+     *
+     * @return string
+     */
+    protected function addTag($tag = null)
+    {
+        if ($tag !== null) {
+            return self::TAG_DELIMITER . $tag;
+        }
+        return '';
+    }
+
+    /**
+     * For internal use only.
      *
      * @param string $name
      *
+     * @return string
+     */
+    protected function stripTag($name)
+    {
+        return explode(self::TAG_DELIMITER, $name)[0];
+    }
+
+    /**
+     * Add 'use_backend' parameter.
+     *
+     * @param string $name
+     * @param string|null $tag
+     *
      * @return static
      */
-    public function addUseBackend($name)
+    public function addUseBackend($name, $tag = null)
     {
-        parent::addParameter("use_backend $name");
+        parent::addParameter("use_backend $name" . $this->addTag($tag));
 
         return $this;
     }
@@ -89,13 +119,15 @@ class Frontend extends Proxy
      *
      * @return static
      */
-    public function addUseBackendWithConditions($name, array $conditions, $test = 'if')
+    public function addUseBackendWithConditions($name, array $conditions, $test = 'if', $tag = null)
     {
         $or = '||';
 
-        if (!$this->useBackendExists($name)) {
-            $this->addUseBackend($name);
+        if (!$this->useBackendExists($name, $tag)) {
+            $this->addUseBackend($name, $tag);
         }
+
+        $backend = $name . $this->addTag($tag);
 
         $grouped = [$conditions];
         if (in_array($or, $conditions)) {
@@ -112,14 +144,14 @@ class Frontend extends Proxy
         }
 
         if (!empty($conditions)) {
-            if (!isset($this->useBackendConditions[$name]['conditions'])) {
-                $this->useBackendConditions[$name]['conditions'] = [];
+            if (!isset($this->useBackendConditions[$backend]['conditions'])) {
+                $this->useBackendConditions[$backend]['conditions'] = [];
             }
-            $this->useBackendConditions[$name]['test'] = $test;
+            $this->useBackendConditions[$backend]['test'] = $test;
             // The array_unique here is to filter out any double condition
             // groups that might be present.
-            $this->useBackendConditions[$name]['conditions'] = array_unique(array_merge(
-                $this->useBackendConditions[$name]['conditions'],
+            $this->useBackendConditions[$backend]['conditions'] = array_unique(array_merge(
+                $this->useBackendConditions[$backend]['conditions'],
                 $grouped
             ), SORT_REGULAR);
         }
@@ -131,60 +163,67 @@ class Frontend extends Proxy
      * Check if a given 'use_backend' statement has conditions.
      *
      * @param string $name
+     * @param string|null $tag
      *
      * @return bool
      */
-    public function useBackendHasConditions($name)
+    public function useBackendHasConditions($name, $tag = null)
     {
-        return $this->useBackendExists($name) && !empty($this->useBackendConditions[$name]['conditions']);
+        $backend = $name . $this->addTag($tag);
+        return $this->useBackendExists($name, $tag) && !empty($this->useBackendConditions[$backend]['conditions']);
     }
 
     /**
      * Check if a given 'use_backend' statement has conditions.
      *
      * @param string $name
+     * @param string|null $tag
      *
      * @return array|null
      */
-    public function useBackendGetConditions($name)
+    public function useBackendGetConditions($name, $tag = null)
     {
-        return $this->useBackendHasConditions($name) ? $this->useBackendConditions[$name] : null;
+        $backend = $name . $this->addTag($tag);
+        return $this->useBackendHasConditions($name, $tag) ? $this->useBackendConditions[$backend] : null;
     }
 
     /**
      * Remove 'use_backend' parameter.
      *
      * @param string $name
+     * @param string|null $tag
      *
      * @return static
      */
-    public function removeUseBackend($name)
+    public function removeUseBackend($name, $tag = null)
     {
-        return $this->removeParameter("use_backend $name");
+        return $this->removeParameter("use_backend $name" . $this->addTag($tag));
     }
 
     /**
      * Check if 'use_backend' parameter exists.
      *
      * @param string $name
+     * @param string|null $tag
      *
      * @return bool
      */
-    public function useBackendExists($name)
+    public function useBackendExists($name, $tag = null)
     {
-        return $this->parameterExists("use_backend $name");
+        return $this->parameterExists("use_backend $name" . $this->addTag($tag));
     }
 
     /**
      * Get the details of the given 'use_backend'.
      *
      * @param string $name
+     * @param string|null $tag
      *
      * @return array|null
      */
-    public function getUseBackendDetails($name)
+    public function getUseBackendDetails($name, $tag = null)
     {
-        return $this->useBackendGetConditions($name);
+        return $this->useBackendGetConditions($name . $this->addTag($tag));
     }
 
     /**
@@ -246,6 +285,7 @@ class Frontend extends Proxy
                 $name = explode(' ', $keyword)[1];
 
                 if ($conditions = $this->useBackendGetConditions($name)) {
+                    $keyword = $this->stripTag($keyword);
                     $keyword .= ' ' . $conditions['test'];
                     // HAProxy has an argument limit of 64 (MAX_LINE_ARGS)! We
                     // take some margin here to be sure.
@@ -270,7 +310,7 @@ class Frontend extends Proxy
                     continue;
                 }
             }
-            $text .= $this->printLine($keyword, $params, $maxKeyLength, $indent);
+            $text .= $this->printLine($this->stripTag($keyword), $params, $maxKeyLength, $indent);
         }
 
         if (!empty($text)) {
