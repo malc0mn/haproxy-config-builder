@@ -22,6 +22,11 @@ abstract class Parambag extends Printable
     protected $parameters;
 
     /**
+     * @var array
+     */
+    protected $parameterPrios;
+
+    /**
      * @var Comment
      */
     protected $comment;
@@ -187,10 +192,11 @@ abstract class Parambag extends Printable
      *
      * @param string $keyword
      * @param string|array $params
+     * @param int|null $prio
      *
      * @return static
      */
-    public function addParameter($keyword, $params = [])
+    public function addParameter($keyword, $params = [], $prio = null)
     {
         $params = $this->toArray($params, $keyword);
         // Handle keywords that can occur multiple times.
@@ -200,6 +206,10 @@ abstract class Parambag extends Printable
             $params = array_slice($params, $this->allowDuplicate[$oldKey]);
         }
         $this->parameters[$keyword] = $params;
+
+        if (is_int($prio)) {
+            $this->parameterPrios[$keyword] = $prio;
+        }
 
         return $this;
     }
@@ -213,7 +223,10 @@ abstract class Parambag extends Printable
      */
     public function removeParameter($keyword)
     {
-        unset($this->parameters[$keyword]);
+        unset(
+            $this->parameters[$keyword],
+            $this->parameterPrios[$keyword]
+        );
 
         return $this;
     }
@@ -236,7 +249,9 @@ abstract class Parambag extends Printable
     /**
      * Get the data for the given parameter.
      *
-     * @return array
+     * @param string $param
+     *
+     * @return array|null
      */
     public function getParameter($param)
     {
@@ -253,6 +268,47 @@ abstract class Parambag extends Printable
     public function parameterExists($param)
     {
         return isset($this->parameters[$param]);
+    }
+
+    /**
+     * Get the data for the given parameter.
+     *
+     * @param string $param
+     *
+     * @return array|null
+     */
+    public function getParameterPrio($param)
+    {
+        return $this->parameterExists($param) ? $this->parameterPrios[$param] : null;
+    }
+
+    /**
+     * Get the data for the given parameter.
+     *
+     * @param string $param
+     * @param int $prio
+     *
+     * @return bool true on success, false on failure
+     */
+    public function setParameterPrio($param, $prio)
+    {
+        if ($this->parameterExists($param) && is_int($prio)) {
+            $this->parameterPrios[$param] = $prio;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if the given parameter has a priority.
+     *
+     * @param string $param
+     *
+     * @return bool
+     */
+    public function parameterHasPrio($param)
+    {
+        return $this->parameterExists($param) && isset($this->parameterPrios[$param]);
     }
 
     /**
@@ -365,6 +421,13 @@ abstract class Parambag extends Printable
      * @return array
      */
     public function getOrderedParameters() {
+        // First sort on the requested parameter prios.
+        if (!empty($this->parameterPrios) && is_array($this->parameterPrios)) {
+            asort($this->parameterPrios);
+            $this->parameters = array_merge($this->parameterPrios, $this->parameters);
+        }
+
+        // Now we make sure we have the right output ORDER.
         if (!empty($this->order)) {
             $sorted = [];
             // We need to work on a copy since we will be unsetting stuff...

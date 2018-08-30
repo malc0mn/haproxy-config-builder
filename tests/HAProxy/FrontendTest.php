@@ -316,6 +316,50 @@ TEXT;
         );
     }
 
+    public function testAddUseBackendWithConditionsAndPrioPrinted()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->setParameterOrder(['acl', 'use_backend'])
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addUseBackendWithConditions('backend', ['is_https'], 'if', 'https', 2)
+            ->addUseBackendWithConditions('backend', ['is_host_com'], 'if', 'www', 1)
+        ;
+
+        $this->assertTrue(
+            $frontend->useBackendExists('backend', 'www')
+        );
+
+        $this->assertTrue(
+            $frontend->useBackendExists('backend', 'https')
+        );
+
+        $this->assertEquals(
+            ['conditions' => [['is_host_com']], 'test' => 'if'],
+            $frontend->getUseBackendDetails('backend', 'www')
+        );
+
+        $this->assertEquals(
+            ['conditions' => [['is_https']], 'test' => 'if'],
+            $frontend->getUseBackendDetails('backend', 'https')
+        );
+
+        $print = <<<TEXT
+frontend www_frontend
+acl         is_host_com hdr(Host) -i example.com
+acl         is_https hdr(X-Forwarded-Proto) -i https
+use_backend backend if is_host_com
+use_backend backend if is_https
+
+
+TEXT;
+
+        $this->assertEquals(
+            $print,
+            (string)$frontend
+        );
+    }
+
     public function testAddUseBackendWithDoubleConditions()
     {
         $frontend = Frontend::create('www_frontend')

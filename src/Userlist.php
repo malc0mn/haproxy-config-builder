@@ -293,7 +293,7 @@ class Userlist extends Parambag
     /**
      * {@inheritdoc}
      */
-    public function addParameter($keyword, $params = [])
+    public function addParameter($keyword, $params = [], $prio = null)
     {
         throw new InvalidParameterException(
             'Adding separate parameters on a user list is not allowed!'

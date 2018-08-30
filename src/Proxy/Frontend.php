@@ -37,7 +37,7 @@ class Frontend extends Proxy
      *
      * @throws InvalidParameterException
      */
-    public function addParameter($keyword, $params = [])
+    public function addParameter($keyword, $params = [], $prio = null)
     {
         if (!empty($keyword)) {
             switch ($keyword) {
@@ -48,7 +48,7 @@ class Frontend extends Proxy
                         throw new InvalidParameterException("The 'use_backend' keyword expects at least one parameter!");
                     }
 
-                    $this->addUseBackend($params[0]);
+                    $this->addUseBackend($params[0], null, $prio);
 
                     // If this 'use_backend' call has conditions, parse them as
                     // well.
@@ -60,7 +60,7 @@ class Frontend extends Proxy
 
                     break;
                 default:
-                    parent::addParameter($keyword, $params);
+                    parent::addParameter($keyword, $params, $prio);
             }
         }
 
@@ -99,12 +99,13 @@ class Frontend extends Proxy
      *
      * @param string $name
      * @param string|null $tag
+     * @param int|null $prio
      *
      * @return static
      */
-    public function addUseBackend($name, $tag = null)
+    public function addUseBackend($name, $tag = null, $prio = null)
     {
-        parent::addParameter("use_backend $name" . $this->addTag($tag));
+        parent::addParameter("use_backend $name" . $this->addTag($tag), [], $prio);
 
         return $this;
     }
@@ -116,15 +117,22 @@ class Frontend extends Proxy
      * @param string $name
      * @param array $conditions
      * @param string $test
+     * @param string|null $tag
+     * @param int|null $prio
      *
      * @return static
      */
-    public function addUseBackendWithConditions($name, array $conditions, $test = 'if', $tag = null)
-    {
+    public function addUseBackendWithConditions(
+        $name,
+        array $conditions,
+        $test = 'if',
+        $tag = null,
+        $prio = null
+    ) {
         $or = '||';
 
         if (!$this->useBackendExists($name, $tag)) {
-            $this->addUseBackend($name, $tag);
+            $this->addUseBackend($name, $tag, $prio);
         }
 
         $backend = $name . $this->addTag($tag);
