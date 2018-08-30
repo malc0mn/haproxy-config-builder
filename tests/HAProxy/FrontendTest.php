@@ -222,6 +222,42 @@ class FrontendTest extends TestCase
         );
     }
 
+    public function testAddUseBackendWithDoubleConditions()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addAcl('is_host_com', 'hdr(Host) -i example.com')
+            ->addAcl('is_https', 'hdr(X-Forwarded-Proto) -i https')
+            ->addUseBackendWithConditions('https_backend', ['is_https'])
+            ->addUseBackendWithConditions('www_backend', ['is_host_com'])
+        ;
+
+        $this->assertTrue(
+            $frontend->useBackendExists('www_backend')
+        );
+
+        $this->assertTrue(
+            $frontend->useBackendExists('https_backend')
+        );
+
+        $this->assertEquals(
+            ['conditions' => [['is_host_com']], 'test' => 'if'],
+            $frontend->getUseBackendDetails('www_backend')
+        );
+
+        $this->assertEquals(
+            ['conditions' => [['is_https']], 'test' => 'if'],
+            $frontend->getUseBackendDetails('https_backend')
+        );
+
+        $frontend->addUseBackendWithConditions('https_backend', ['is_https']);
+
+        $this->assertEquals(
+            ['conditions' => [['is_https']], 'test' => 'if'],
+            $frontend->getUseBackendDetails('https_backend')
+        );
+
+    }
+
     public function testRemoveUseBackend()
     {
         $frontend = Frontend::create('www_frontend')
