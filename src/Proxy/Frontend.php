@@ -116,10 +116,12 @@ class Frontend extends Proxy
                 $this->useBackendConditions[$name]['conditions'] = [];
             }
             $this->useBackendConditions[$name]['test'] = $test;
-            $this->useBackendConditions[$name]['conditions'] = array_merge(
+            // The array_unique here is to filter out any double condition
+            // groups that might be present.
+            $this->useBackendConditions[$name]['conditions'] = array_unique(array_merge(
                 $this->useBackendConditions[$name]['conditions'],
                 $grouped
-            );
+            ), SORT_REGULAR);
         }
 
         return $this;
