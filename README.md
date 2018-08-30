@@ -271,7 +271,7 @@ echo (string)$config;
  backend servers
      server server1 127.0.0.1:8000 maxconn 32
  */
-````
+```
 
 ### Now what?
 
