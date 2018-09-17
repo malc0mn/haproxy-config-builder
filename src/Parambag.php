@@ -49,6 +49,8 @@ abstract class Parambag extends Printable
         'stats' => 1,
         'tcp-check' => 2,
         'timeout' => 1,
+        'filter' => 1,
+        'compression' => 1,
     ];
 
     /**
