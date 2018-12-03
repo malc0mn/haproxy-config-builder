@@ -190,6 +190,43 @@ abstract class Parambag extends Printable
     }
 
     /**
+     * What this method will do is convert something like this:
+     *     [
+     *         'is_host',
+     *         '||',
+     *         'is_path is_host',   // Note the space here!!
+     *         '||',
+     *         'is_path1',
+     *         'is_host2 is_path2', // Note the space here!!
+     *     ]
+     *
+     * To a 'real' flat array like this:
+     *     [
+     *         'is_host',
+     *         '||',
+     *         'is_path',
+     *         'is_host',
+     *         '||',
+     *         'is_path1',
+     *         'is_host2',
+     *         'is_path2',
+     *     ]
+     *
+     * @param array $params
+     */
+    protected function toFullFlatArray(array $params)
+    {
+        // Explode all elements in the array on spaces.
+        array_walk(
+            $params,
+            function(&$item){ $item = explode(' ', $item); }
+        );
+
+        // Flatten the array back to a single dimensional array.
+        return call_user_func_array('array_merge', $params);
+    }
+
+    /**
      * Add a parameter to the bag.
      *
      * @param string $keyword

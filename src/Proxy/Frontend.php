@@ -137,6 +137,8 @@ class Frontend extends Proxy
 
         $backend = $name . $this->addTag($tag);
 
+        $conditions = $this->toFullFlatArray($conditions);
+
         $grouped = [$conditions];
         if (in_array($or, $conditions)) {
             $grouped = [];

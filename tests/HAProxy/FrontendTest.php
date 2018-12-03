@@ -393,7 +393,290 @@ TEXT;
             ['conditions' => [['is_https']], 'test' => 'if'],
             $frontend->getUseBackendDetails('https_backend')
         );
+    }
 
+    public function testUseBackendWithLotsOfConditions()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addUseBackendWithConditions('www_backend', [
+                'is_host_0 is_path_admin',
+                '||',
+                'is_host_1 is_path_admin',
+                '||',
+                'is_host_2 is_path_admin',
+                '||',
+                'is_host_3 is_path_admin',
+                '||',
+                'is_host_4 is_path_admin',
+                '||',
+                'is_host_5 is_path_admin',
+                '||',
+                'is_host_6 is_path_admin',
+                '||',
+                'is_host_7 is_path_admin',
+                '||',
+                'is_host_8 is_path_admin',
+                '||',
+                'is_host_9 is_path_admin',
+                '||',
+                'is_host_10 is_path_admin',
+                '||',
+                'is_host_11 is_path_admin',
+                '||',
+                'is_host_12 is_path_admin',
+                '||',
+                'is_host_13 is_path_admin',
+                '||',
+                'is_host_14 is_path_admin',
+                '||',
+                'is_host_15 is_path_admin',
+                '||',
+                'is_host_16 is_path_admin',
+                '||',
+                'is_host_17 is_path_admin',
+                '||',
+                'is_host_18 is_path_admin',
+                '||',
+                'is_host_19 is_path_admin',
+                '||',
+                'is_host_20 is_path_admin',
+                '||',
+                'is_host_21 is_path_admin',
+                '||',
+                'is_host_22 is_path_admin',
+                '||',
+                'is_host_23 is_path_admin',
+                '||',
+                'is_host_24 is_path_admin',
+                '||',
+                'is_host_25 is_path_admin',
+                '||',
+                'is_host_26 is_path_admin',
+                '||',
+                'is_host_27 is_path_admin',
+                '||',
+                'is_host_28 is_path_admin',
+                '||',
+                'is_host_29 is_path_admin',
+            ])
+        ;
+
+        $this->assertTrue(
+            $frontend->useBackendExists('www_backend')
+        );
+
+        $this->assertEquals(
+            [
+                'conditions' => [
+                    [
+                        'is_host_0',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_1',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_2',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_3',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_4',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_5',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_6',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_7',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_8',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_9',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_10',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_11',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_12',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_13',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_14',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_15',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_16',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_17',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_18',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_19',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_20',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_21',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_22',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_23',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_24',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_25',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_26',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_27',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_28',
+                        'is_path_admin',
+                    ],
+                    [
+                        'is_host_29',
+                        'is_path_admin',
+                    ],
+                ],
+                'test' => 'if',
+            ],
+            $frontend->getUseBackendDetails('www_backend')
+        );
+    }
+
+    public function testUseBackendWithLotsOfConditionsPrint()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addUseBackendWithConditions('www_backend', [
+                'is_host_0 is_path_admin',
+                '||',
+                'is_host_1 is_path_admin',
+                '||',
+                'is_host_2 is_path_admin',
+                '||',
+                'is_host_3 is_path_admin',
+                '||',
+                'is_host_4 is_path_admin',
+                '||',
+                'is_host_5 is_path_admin',
+                '||',
+                'is_host_6 is_path_admin',
+                '||',
+                'is_host_7 is_path_admin',
+                '||',
+                'is_host_8 is_path_admin',
+                '||',
+                'is_host_9 is_path_admin',
+                '||',
+                'is_host_10 is_path_admin',
+                '||',
+                'is_host_11 is_path_admin',
+                '||',
+                'is_host_12 is_path_admin',
+                '||',
+                'is_host_13 is_path_admin',
+                '||',
+                'is_host_14 is_path_admin',
+                '||',
+                'is_host_15 is_path_admin',
+                '||',
+                'is_host_16 is_path_admin',
+                '||',
+                'is_host_17 is_path_admin',
+                '||',
+                'is_host_18 is_path_admin',
+                '||',
+                'is_host_19 is_path_admin',
+                '||',
+                'is_host_20 is_path_admin',
+                '||',
+                'is_host_21 is_path_admin',
+                '||',
+                'is_host_22 is_path_admin',
+                '||',
+                'is_host_23 is_path_admin',
+                '||',
+                'is_host_24 is_path_admin',
+                '||',
+                'is_host_25 is_path_admin',
+                '||',
+                'is_host_26 is_path_admin',
+                '||',
+                'is_host_27 is_path_admin',
+                '||',
+                'is_host_28 is_path_admin',
+                '||',
+                'is_host_29 is_path_admin',
+            ])
+        ;
+
+        $this->assertTrue(
+            $frontend->useBackendExists('www_backend')
+        );
+
+        $print = <<<TEXT
+frontend www_frontend
+use_backend www_backend if is_host_0 is_path_admin || is_host_1 is_path_admin || is_host_2 is_path_admin || is_host_3 is_path_admin || is_host_4 is_path_admin || is_host_5 is_path_admin || is_host_6 is_path_admin || is_host_7 is_path_admin || is_host_8 is_path_admin || is_host_9 is_path_admin || is_host_10 is_path_admin || is_host_11 is_path_admin || is_host_12 is_path_admin || is_host_13 is_path_admin || is_host_14 is_path_admin || is_host_15 is_path_admin || is_host_16 is_path_admin || is_host_17 is_path_admin || is_host_18 is_path_admin || is_host_19 is_path_admin
+use_backend www_backend if is_host_20 is_path_admin || is_host_21 is_path_admin || is_host_22 is_path_admin || is_host_23 is_path_admin || is_host_24 is_path_admin || is_host_25 is_path_admin || is_host_26 is_path_admin || is_host_27 is_path_admin || is_host_28 is_path_admin || is_host_29 is_path_admin
+
+
+TEXT;
+
+        $this->assertEquals(
+            $print,
+            (string)$frontend
+        );
     }
 
     public function testRemoveUseBackend()
