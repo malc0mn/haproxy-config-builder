@@ -679,6 +679,17 @@ TEXT;
         );
     }
 
+    public function testUseBackendWithoutConditions()
+    {
+        $frontend = Frontend::create('www_frontend')
+            ->addUseBackendWithConditions('www_backend', [])
+        ;
+
+        $this->assertTrue(
+            $frontend->useBackendExists('www_backend')
+        );
+    }
+
     public function testRemoveUseBackend()
     {
         $frontend = Frontend::create('www_frontend')

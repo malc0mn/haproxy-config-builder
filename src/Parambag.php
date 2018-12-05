@@ -216,14 +216,19 @@ abstract class Parambag extends Printable
      */
     protected function toFullFlatArray(array $params)
     {
-        // Explode all elements in the array on spaces.
-        array_walk(
-            $params,
-            function(&$item){ $item = explode(' ', $item); }
-        );
+        if (!empty($params)) {
+            // Explode all elements in the array on spaces.
+            array_walk(
+                $params,
+                function (&$item) {
+                    $item = explode(' ', $item);
+                }
+            );
 
-        // Flatten the array back to a single dimensional array.
-        return call_user_func_array('array_merge', $params);
+            // Flatten the array back to a single dimensional array.
+            return call_user_func_array('array_merge', $params);
+        }
+        return $params;
     }
 
     /**
