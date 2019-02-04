@@ -180,8 +180,9 @@ The proxy blocks will be rendered according to their given priority with some
 limitations:
 1. `global` will **always** be rendered **first** (1st).
 2. `defaults` will **always** be rendered **second** (2nd).
-3. `userlist` will **always** be rendered **third** (3rd).
-4. Attempting to set a print priority on `defaults` will throw an exception.
+3. `resolvers` will **always** be rendered **second** (3rd).
+4. `userlist` will **always** be rendered **third** (4th).
+5. Attempting to set a print priority on `defaults` will throw an exception.
 
 You can thus only control the print priority of `backend`, `frontend` and
 `listen` proxy blocks.

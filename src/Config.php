@@ -22,6 +22,11 @@ class Config extends Printable
     private $defaults;
 
     /**
+     * @var Resolvers[]
+     */
+    private $resolvers;
+
+    /**
      * @var Userlist[]
      */
     private $userlists;
@@ -44,6 +49,7 @@ class Config extends Printable
     {
         $this->global = new Globals();
         $this->defaults = new Defaults();
+        $this->resolvers = [];
         $this->userlists = [];
         $this->proxies = [];
         $this->printables = [];
@@ -125,6 +131,10 @@ class Config extends Printable
 
                     case $configString->firstWordMatches('defaults'):
                         $config->setDefaults(Defaults::fromString($configString));
+                        break;
+
+                    case $configString->firstWordMatches('resolvers'):
+                        $config->addResolvers(Resolvers::fromString($configString));
                         break;
 
                     case $configString->firstWordMatches('userlist'):
@@ -275,6 +285,54 @@ class Config extends Printable
     public function getDefaults()
     {
         return $this->defaults;
+    }
+
+    /**
+     * Add resolvers.
+     *
+     * @param Resolvers $resovers
+     *
+     * @return self
+     */
+    public function addResolvers(Resolvers $resovers)
+    {
+        $this->resolvers[$resovers->getName()] = $resovers;
+
+        return $this;
+    }
+
+    /**
+     * Get resolvers by name.
+     *
+     * @param string $name
+     *
+     * @return Resolvers|null
+     */
+    public function getResolvers($name)
+    {
+        return isset($this->resolvers[$name]) ? $this->resolvers[$name] : null;
+    }
+
+    /**
+     * Checks if the given resolvers exist.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function resolversExists($name)
+    {
+        return isset($this->resolvers[$name]);
+    }
+
+    /**
+     * Get resolvers.
+     *
+     * @return Resolvers[]
+     */
+    public function getAllResolvers()
+    {
+        return $this->resolvers;
     }
 
     /**
@@ -553,6 +611,10 @@ class Config extends Printable
 
         $text .= $this->global->prettyPrint($indentLevel+1, $spacesPerIndent);
         $text .= $this->defaults->prettyPrint($indentLevel+1, $spacesPerIndent);
+
+        foreach ($this->resolvers as $resolvers) {
+            $text .= $resolvers->prettyPrint($indentLevel+1, $spacesPerIndent);
+        }
 
         foreach ($this->userlists as $userlist) {
             $text .= $userlist->prettyPrint($indentLevel+1, $spacesPerIndent);

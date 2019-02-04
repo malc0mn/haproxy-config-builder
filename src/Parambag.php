@@ -168,7 +168,7 @@ abstract class Parambag extends Printable
      */
     protected static function isSection($string)
     {
-        return in_array($string, ['global', 'defaults', 'userlist', 'frontend', 'backend', 'listen']);
+        return in_array($string, ['global', 'defaults', 'resolvers', 'userlist', 'frontend', 'backend', 'listen']);
     }
 
     /**

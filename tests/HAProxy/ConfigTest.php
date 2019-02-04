@@ -6,6 +6,7 @@ use HAProxy\Config\Comment;
 use HAProxy\Config\Proxy\Backend;
 use HAProxy\Config\Proxy\Frontend;
 use HAProxy\Config\Proxy\Listen;
+use HAProxy\Config\Resolvers;
 use HAProxy\Config\Userlist;
 use HAProxy\Config\Config;
 use org\bovigo\vfs\vfsStream;
@@ -238,6 +239,16 @@ TEXT;
             ->addDefaults('timeout', ['connect', '5000ms'])
             ->addDefaults('timeout', ['client', '50000ms'])
             ->addDefaults('timeout', ['server', '50000ms'])
+            ->addResolvers(
+                Resolvers::create('public-dns')
+                    ->addNameserver('c1', '1.1.1.1', 53)
+                    ->addNameserver('c2', '1.0.0.1') // no port!
+                    ->addNameserver('g1', '8.8.8.8') // no port!
+                    ->addNameserver('g2', '8.8.4.4', 53)
+                    ->addParameter('resolve_retries', 3)
+                    ->addParameter('timeout', ['retry', '1s'])
+                    ->addParameter('hold', ['valid', '60s'])
+            )
             ->addUserlist(
                 Userlist::create('developers')
                     ->addUser('eddy', '$6$mlskxjmqlkcnmlcjsmdl', ['editor', 'admin'])
@@ -314,6 +325,16 @@ TEXT;
             ->addDefaults('timeout', ['connect', '5000ms'])
             ->addDefaults('timeout', ['client', '50000ms'])
             ->addDefaults('timeout', ['server', '50000ms'])
+            ->addResolvers(
+                Resolvers::create('public-dns')
+                    ->addNameserver('c1', '1.1.1.1', 53)
+                    ->addNameserver('c2', '1.0.0.1') // no port!
+                    ->addNameserver('g1', '8.8.8.8') // no port!
+                    ->addNameserver('g2', '8.8.4.4', 53)
+                    ->addParameter('resolve_retries', 3)
+                    ->addParameter('timeout', ['retry', '1s'])
+                    ->addParameter('hold', ['valid', '60s'])
+            )
             ->addUserlist(
                 Userlist::create('developers')
                     ->addUser('eddy', '$6$mlskxjmqlkcnmlcjsmdl', ['editor', 'admin'])

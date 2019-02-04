@@ -1,6 +1,6 @@
 <?php
 
-namespace HAProxy\Config\Tests;
+namespace HAProxy\Config\Tests\Proxy;
 
 use HAProxy\Config\Proxy\Defaults;
 use PHPUnit\Framework\TestCase;
