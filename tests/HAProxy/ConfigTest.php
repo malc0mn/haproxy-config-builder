@@ -21,7 +21,7 @@ class ConfigTest extends TestCase
      */
     protected $config;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->config = new Config();
     }
