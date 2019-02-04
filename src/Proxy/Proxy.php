@@ -62,6 +62,8 @@ abstract class Proxy extends Parambag
 
     /**
      * {@inheritdoc}
+     *
+     * @throws TextException
      */
     protected static function buildClass(array $line)
     {
@@ -73,6 +75,8 @@ abstract class Proxy extends Parambag
 
     /**
      * {@inheritdoc}
+     *
+     * @throws TextException
      */
     protected static function handleLine($class, array $line)
     {

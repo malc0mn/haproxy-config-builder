@@ -57,6 +57,8 @@ class Userlist extends Parambag
 
     /**
      * {@inheritdoc}
+     *
+     * @throws TextException
      */
     protected static function buildClass(array $line)
     {
@@ -68,6 +70,8 @@ class Userlist extends Parambag
 
     /**
      * {@inheritdoc}
+     *
+     * @throws FileException
      */
     protected static function handleLine($class, array $line)
     {
@@ -292,6 +296,8 @@ class Userlist extends Parambag
 
     /**
      * {@inheritdoc}
+     *
+     * @throws InvalidParameterException
      */
     public function addParameter($keyword, $params = [], $prio = null)
     {

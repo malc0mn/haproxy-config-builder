@@ -106,6 +106,8 @@ class Config extends Printable
      * @param Text $configString
      *
      * @return Config
+     *
+     * @throws Exception\TextException
      */
     public static function fromString(Text $configString)
     {
@@ -167,6 +169,9 @@ class Config extends Printable
      * @param $filePath
      *
      * @return self
+     *
+     * @throws Exception\TextException
+     * @throws FileException
      */
     public static function fromFile($filePath)
     {

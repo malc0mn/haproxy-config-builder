@@ -36,6 +36,8 @@ class Globals extends Parambag
 
     /**
      * {@inheritdoc}
+     *
+     * @throws TextException
      */
     protected static function buildClass(array $line)
     {

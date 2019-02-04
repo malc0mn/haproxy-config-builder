@@ -19,6 +19,13 @@ class Comment extends Printable
         $this->text = $text;
     }
 
+    /**
+     * @param Text $configString
+     *
+     * @return Comment
+     *
+     * @throws Exception\TextException
+     */
     public static function fromString(Text $configString)
     {
         $text = '';
