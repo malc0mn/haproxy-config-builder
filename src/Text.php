@@ -117,6 +117,8 @@ class Text
      * @param int $position
      *
      * @return string
+     *
+     * @throws TextException
      */
     public function getRestOfTheLine($position = self::CURRENT_POSITION)
     {
@@ -138,6 +140,8 @@ class Text
      * @param string $string
      *
      * @return bool
+     *
+     * @throws TextException
      */
     public function firstWordMatches($string)
     {
@@ -155,7 +159,7 @@ class Text
     {
         $line = $this->getCurrentLine($position);
 
-        return strlen(trim($line)) === 0;
+        return trim($line) === '';
     }
 
     /**
@@ -190,7 +194,7 @@ class Text
             $position = $this->position;
         }
 
-        return strrpos(substr($this->data, 0, $position), "\n", 0);
+        return strrpos(substr($this->data, 0, $position), "\n");
     }
 
     /**

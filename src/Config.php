@@ -603,7 +603,7 @@ class Config extends Printable
      */
     public function prettyPrint($indentLevel, $spacesPerIndent = 4)
     {
-        $text = "";
+        $text = '';
 
         foreach ($this->printables as $printable) {
             $text .= $printable->prettyPrint(0, $spacesPerIndent);

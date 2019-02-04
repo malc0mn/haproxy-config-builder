@@ -23,14 +23,6 @@ class Defaults extends Proxy
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * @throws \HAProxy\Config\Exception\InvalidParameterException
      */
     public function setPrintPriority($priority)
