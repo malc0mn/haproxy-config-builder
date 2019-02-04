@@ -632,12 +632,4 @@ class Config extends Printable
         // Remove trailing empty line.
         return trim($text) . "\n";
     }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->prettyPrint(0);
-    }
 }
