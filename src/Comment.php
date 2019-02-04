@@ -53,7 +53,7 @@ class Comment extends Printable
      */
     public function isEmpty()
     {
-        return is_null($this->text) || $this->text === '';
+        return $this->text === null || $this->text === '';
     }
 
     /**

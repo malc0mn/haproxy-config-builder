@@ -52,7 +52,7 @@ class Globals extends Parambag
      */
     protected static function handleLine($class, array $line)
     {
-        if (in_array($line[0], [self::OPTION_DAEMON, self::OPTION_DEBUG, self::OPTION_QUIET])) {
+        if (in_array($line[0], [self::OPTION_DAEMON, self::OPTION_DEBUG, self::OPTION_QUIET], true)) {
             $class->{$line[0]}(true);
         } elseif (!empty($line[0])) {
             parent::handleLine($class, $line);

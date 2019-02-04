@@ -105,7 +105,7 @@ abstract class Proxy extends Parambag
                     break;
                 case 'server':
                     $host = explode(':', $line[2]);
-                    if (count($host) != 2) {
+                    if (count($host) !== 2) {
                         throw new TextException(sprintf(
                             'Invalid server parameters for %s "%s"',
                             $class->getType(), $class->getName()

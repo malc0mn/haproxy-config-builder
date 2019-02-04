@@ -140,10 +140,10 @@ class Frontend extends Proxy
         $conditions = $this->toFullFlatArray($conditions);
 
         $grouped = [$conditions];
-        if (in_array($or, $conditions)) {
+        if (in_array($or, $conditions, true)) {
             $grouped = [];
             foreach ($conditions as $condition) {
-                if ($condition != $or) {
+                if ($condition !== $or) {
                     $parts[] = $condition;
                     continue;
                 }

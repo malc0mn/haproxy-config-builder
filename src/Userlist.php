@@ -159,7 +159,7 @@ class Userlist extends Parambag
      */
     public function addUserToGroup($user, $group)
     {
-        if (!in_array($user, $this->parameters['groups'][$group])) {
+        if (!in_array($user, $this->parameters['groups'][$group], true)) {
             $this->parameters['groups'][$group][] = $user;
         }
 
@@ -174,7 +174,7 @@ class Userlist extends Parambag
      */
     public function removeUserFromGroup($user, $group)
     {
-        $key = array_search($user, $this->parameters['groups'][$group]);
+        $key = array_search($user, $this->parameters['groups'][$group], true);
         if ($key !== false) {
             unset($this->parameters['groups'][$group][$key]);
         }
@@ -267,7 +267,7 @@ class Userlist extends Parambag
      */
     public function addGroupToUser($group, $user)
     {
-        if (!in_array($group, $this->parameters['users'][$user]['groups'])) {
+        if (!in_array($group, $this->parameters['users'][$user]['groups'], true)) {
             $this->parameters['users'][$user]['groups'][] = $group;
         }
 
@@ -284,7 +284,8 @@ class Userlist extends Parambag
     {
         $key = array_search(
             $group,
-            $this->parameters['users'][$user]['groups']
+            $this->parameters['users'][$user]['groups'],
+            true
         );
 
         if ($key !== false) {

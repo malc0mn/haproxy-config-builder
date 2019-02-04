@@ -64,8 +64,8 @@ class Config extends Printable
      */
     public function saveToFile($filePath)
     {
-        $handle = @fopen($filePath, 'w');
-        if (false === $handle) {
+        $handle = @fopen($filePath, 'wb');
+        if ($handle === false) {
             throw new FileException(sprintf(
                 'Cannot open file "%s" for writing.',
                 $filePath

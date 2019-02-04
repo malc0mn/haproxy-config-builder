@@ -247,7 +247,7 @@ abstract class Parambag extends Printable
     {
         $params = $this->toArray($params, $keyword);
         // Handle keywords that can occur multiple times.
-        if (in_array($keyword, array_keys($this->allowDuplicate))) {
+        if (array_key_exists($keyword, $this->allowDuplicate)) {
             $oldKey = $keyword;
             $keyword = $keyword . ' ' . implode(' ', array_slice($params, 0, $this->allowDuplicate[$oldKey]));
             $params = array_slice($params, $this->allowDuplicate[$oldKey]);
@@ -558,7 +558,7 @@ abstract class Parambag extends Printable
             $glue = '';
         }
         // TODO: properly handle comments!!!
-        if (stripos($keyword, '#') !== 0) {
+        if (strpos($keyword, '#') !== 0) {
             $keyword = explode(' ', $keyword);
             $keyword = str_pad($keyword[0], $maxKeyLength) . (isset($keyword[1]) ? ' ' . implode(' ', array_slice($keyword, 1)) : '');
         }
