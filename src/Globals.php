@@ -102,7 +102,7 @@ class Globals extends Parambag
     }
 
     /**
-     * Add special debug option.
+     * Add special daemon option.
      *
      * @param bool $bool
      */

@@ -86,7 +86,9 @@ abstract class Parambag extends Printable
     {
         $line = explode(' ', self::cleanLine($configString->getRestOfTheLine()), 2);
 
-        $class = static::buildclass($line);
+        // Use static here, so that we call the buildClass() method from
+        // the class that extends from us!
+        $class = static::buildClass($line);
 
         $configString->gotoNextEol();
         $configString->inc();
@@ -100,7 +102,8 @@ abstract class Parambag extends Printable
                 return $class;
             }
 
-            // Use static here, NOT self!!
+            // Use static here, so that we call the handleLine() method from
+            // the class that extends from us!
             static::handleLine($class, $line);
 
             $configString->gotoNextEol();
