@@ -14,6 +14,10 @@ use HAProxy\Config\Exception\TextException;
  */
 class Globals extends Parambag
 {
+    const OPTION_DAEMON = 'daemon';
+    const OPTION_DEBUG = 'debug';
+    const OPTION_QUIET = 'quiet';
+
     /**
      * {@inheritdoc}
      */
@@ -46,7 +50,7 @@ class Globals extends Parambag
      */
     protected static function handleLine($class, array $line)
     {
-        if (in_array($line[0], ['debug', 'quiet', 'daemon'])) {
+        if (in_array($line[0], [self::OPTION_DAEMON, self::OPTION_DEBUG, self::OPTION_QUIET])) {
             $class->{$line[0]}(true);
         } elseif (!empty($line[0])) {
             parent::handleLine($class, $line);
@@ -61,9 +65,9 @@ class Globals extends Parambag
     public function debug($bool = true)
     {
         if ($bool) {
-            $this->addParameter('debug');
+            $this->addParameter(self::OPTION_DEBUG);
         } else {
-            $this->removeParameter('debug');
+            $this->removeParameter(self::OPTION_DEBUG);
         }
     }
 
@@ -74,7 +78,7 @@ class Globals extends Parambag
      */
     public function isDebug()
     {
-        return $this->parameterExists('debug');
+        return $this->parameterExists(self::OPTION_DEBUG);
     }
 
     /**
@@ -85,9 +89,9 @@ class Globals extends Parambag
     public function quiet($bool = true)
     {
         if ($bool) {
-            $this->addParameter('quiet');
+            $this->addParameter(self::OPTION_QUIET);
         } else {
-            $this->removeParameter('quiet');
+            $this->removeParameter(self::OPTION_QUIET);
         }
     }
 
@@ -98,7 +102,7 @@ class Globals extends Parambag
      */
     public function isQuiet()
     {
-        return $this->parameterExists('quiet');
+        return $this->parameterExists(self::OPTION_QUIET);
     }
 
     /**
@@ -109,9 +113,9 @@ class Globals extends Parambag
     public function daemon($bool = true)
     {
         if ($bool) {
-            $this->addParameter('daemon');
+            $this->addParameter(self::OPTION_DAEMON);
         } else {
-            $this->removeParameter('daemon');
+            $this->removeParameter(self::OPTION_DAEMON);
         }
     }
 
@@ -122,6 +126,6 @@ class Globals extends Parambag
      */
     public function isDaemon()
     {
-        return $this->parameterExists('daemon');
+        return $this->parameterExists(self::OPTION_DAEMON);
     }
 }
