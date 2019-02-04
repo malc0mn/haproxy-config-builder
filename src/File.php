@@ -22,7 +22,7 @@ class File extends Text
 
         $contents = @file_get_contents($this->inFilePath);
 
-        if (false === $contents) {
+        if ($contents === false) {
             throw new FileException(sprintf(
                 'Cannot read file "%s".', $this->inFilePath
             ));

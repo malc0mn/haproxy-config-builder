@@ -73,7 +73,7 @@ class Config extends Printable
         }
 
         $bytesWritten = @fwrite($handle, (string)$this);
-        if (false === $bytesWritten) {
+        if ($bytesWritten === false) {
             fclose($handle);
             throw new FileException(sprintf(
                 'Cannot write to file "%s".',
@@ -82,7 +82,7 @@ class Config extends Printable
         }
 
         $closed = @fclose($handle);
-        if (false === $closed) {
+        if ($closed === false) {
             throw new FileException(sprintf(
                 'Cannot close file handle for "%s".',
                 $filePath
