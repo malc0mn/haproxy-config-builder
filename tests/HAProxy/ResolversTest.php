@@ -13,7 +13,7 @@ class ResolversTest extends TestCase
      */
     private $resolvers;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resolvers = new Resolvers('test');
     }

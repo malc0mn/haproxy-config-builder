@@ -13,7 +13,7 @@ class UserlistTest extends TestCase
      */
     private $userlist;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->userlist = new Userlist('test');
     }
