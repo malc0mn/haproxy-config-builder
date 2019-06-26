@@ -42,6 +42,7 @@ abstract class Parambag extends Printable
     protected $allowDuplicate = [
         'errorfile' => 1,
         'http-request' => 3,
+        'http-response' => 3,
         'option' => 1,
         'redirect' => 5,
         'reqrep' => 1,
