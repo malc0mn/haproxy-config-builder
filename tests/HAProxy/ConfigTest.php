@@ -276,6 +276,8 @@ TEXT;
                     ->addAcl('is_host_example', ['hdr(host)', '-i', 'example.com'])
                     ->addParameter('http-response', ['del-header', 'Server'])
                     ->addParameter('http-response', ['del-header', 'X-Powered-By'])
+                    ->addParameter('http-response', ['set-header', 'X-Robots-Tag', '"noindex, nofollow"', 'if', 'is_host_a'])
+                    ->addParameter('http-response', ['set-header', 'X-Robots-Tag', '"noindex, nofollow"', 'if', 'is_host_b'])
                     ->addUseBackendWithConditions('servers', ['is_host_example'])
             )
             ->addBackend(
@@ -365,6 +367,8 @@ TEXT;
                     ->addParameter('http-response', ['del-header', 'Server'])
                     ->addParameter('http-response', ['del-header', 'X-Powered-By'])
                     ->addUseBackendWithConditions('servers', ['is_host_example'])
+                    ->addParameter('http-response set-header X-Robots-Tag "noindex, nofollow" if is_host_a')
+                    ->addParameter('http-response set-header X-Robots-Tag "noindex, nofollow" if is_host_b')
             )
             ->addBackend(
                 Backend::create('servers')
