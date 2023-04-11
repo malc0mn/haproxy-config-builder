@@ -291,6 +291,9 @@ class Frontend extends Proxy
         }
 
         foreach ($this->getOrderedParameters() as $keyword => $params) {
+            // This is not a good solution, it should be something universal but
+            // this requires a thorough rewrite of this ancient and not so good
+            // library.
             if (stripos($keyword, 'use_backend') === 0) {
                 $name = explode(' ', $keyword)[1];
 
@@ -320,6 +323,26 @@ class Frontend extends Proxy
                     continue;
                 }
             }
+
+            // Another bad solution, but it will work :/
+            if (stripos($keyword, 'acl') === 0) {
+                if (count($params) > 60) {
+                    $offset = 1;
+                    if (stripos($params[1], '-') === 0) {
+                        $offset = 2;
+                        if (in_array($params[1], ['-f', '-m'])) {
+                            $offset = 3;
+                        }
+                    }
+                    $base = array_slice($params, 0, $offset);
+                    $parts = array_chunk(array_slice($params, $offset), 59);
+                    foreach ($parts as $i => $part) {
+                        $text .= $this->printLine($this->stripTag($keyword), array_merge($base, $part), $maxKeyLength, $indent);
+                    }
+                    continue;
+                }
+            }
+
             $text .= $this->printLine($this->stripTag($keyword), $params, $maxKeyLength, $indent);
         }
 
