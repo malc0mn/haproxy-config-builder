@@ -106,12 +106,15 @@ abstract class Proxy extends Parambag
                 case 'server':
                     $host = explode(':', $line[2]);
                     if (count($host) !== 2) {
-                        throw new TextException(sprintf(
-                            'Invalid server parameters for %s "%s"',
-                            $class->getType(), $class->getName()
-                        ));
+                        // Check if we have an absolute path for socket support.
+                        if (strpos($line[2], '/') !== 0) {
+                            throw new TextException(sprintf(
+                                'Invalid server parameters for %s "%s"',
+                                $class->getType(), $class->getName()
+                            ));
+                        }
                     }
-                    $class->addServer($line[1], $host[0], $host[1], array_slice($line, 3));
+                    $class->addServer($line[1], $host[0], $host[1] ?? '', array_slice($line, 3));
                     break;
                 default:
                     parent::handleLine($class, $line);
